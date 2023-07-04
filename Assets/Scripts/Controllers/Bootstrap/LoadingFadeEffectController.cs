@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingFadeEffectManager : SingletonPersistent<LoadingFadeEffectManager>
+public class LoadingFadeEffectController : SingletonPersistent<LoadingFadeEffectController>
 {
     [SerializeField]
     private Image transitionBackgroundImage;

@@ -12,7 +12,7 @@ public enum SceneName : byte
     [Description("Bootstrap")]
     Bootstrap,
 
-    [Description("Title Scene")]
+    [Description("Title Screen")]
     TitleScreen,
 
     [Description("Lobby")]
@@ -54,13 +54,13 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
     public void LoadScene(SceneName sceneToLoad, bool isNetworkSessionAction = true)
     {
-        StartCoroutine(Loading(sceneToLoad, isNetworkSessionAction));
+        StartCoroutine(LoadSceneCoroutine(sceneToLoad, isNetworkSessionAction));
     }
 
-    private IEnumerator Loading(SceneName sceneToLoad, bool isNetworkSessionActive = true)
+    private IEnumerator LoadSceneCoroutine(SceneName sceneToLoad, bool isNetworkSessionActive = true)
     {
-        LoadingFadeEffectManager.Instance.FadeIn();
-        yield return new WaitUntil(() => LoadingFadeEffectManager.beginLoad);
+        LoadingFadeEffectController.Instance.FadeIn();
+        yield return new WaitUntil(() => LoadingFadeEffectController.beginLoad);
 
         if (isNetworkSessionActive)
         {
@@ -74,7 +74,7 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
         yield return new WaitForSeconds(1);
 
-        LoadingFadeEffectManager.Instance.FadeOut();
+        LoadingFadeEffectController.Instance.FadeOut();
     }
 
     private void LoadSceneLocal(SceneName sceneToLoad)

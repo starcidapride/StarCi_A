@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class GoToTitleScreenManager : Singleton<GoToTitleScreenManager>
+public class GoToTitleScreenController : Singleton<GoToTitleScreenController>
 {
     private IEnumerator Start()
     {
