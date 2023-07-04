@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using UnityEngine;
 
 using static Constants.MongoDBAtlas;
+using static Constants.MongoDBAtlas.Collections;
 
 public class UserDocument
 {
@@ -37,18 +38,19 @@ public class MongoDBUtils
         return client.GetDatabase(DATABASE);
     }
 
-    public static User GetUser(string username)
+    public static User GetUser(string username, string password)
     {
         try
         {
-            var usersCollection = getDatabase().GetCollection<UserDocument>("users");
+            var usersCollection = getDatabase().GetCollection<UserDocument>(USERS);
 
-            var filter = Builders<UserDocument>.Filter.Eq(user => user.Username, username);
+            var filter = Builders<UserDocument>.Filter.Eq(user => user.Username, username) &
+                         Builders<UserDocument>.Filter.Eq(user => user.Password, password);
 
             var user = usersCollection.Find(filter).FirstOrDefault();
 
             if (user == null) return null;
-            
+
             return new User()
             {
                 Username = user.Username,
@@ -60,11 +62,11 @@ public class MongoDBUtils
                 DeckCollection = null
             };
 
-        } catch (MongoException ex)
+        }
+        catch (MongoException ex)
         {
             Debug.LogException(ex);
             return null;
         }
-        
     }
 }
