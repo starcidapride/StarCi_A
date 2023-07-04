@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 45938973}
   - component: {fileID: 45938977}
   m_Layer: 5
-  m_Name: Fade Effect
+  m_Name: Loading Fade Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f81c77043f9af448bac94b3f0ae563b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 0}
+  transitionBackgroundImage: {fileID: 0}
+  fadeDuration: 0
+  fadeInterval: 0
 --- !u!1 &372787762
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,8 +533,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 687378130}
+  - component: {fileID: 687378131}
   m_Layer: 0
-  m_Name: Load Scene Manager
+  m_Name: Loading Scene Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,6 +556,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &687378131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687378129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aade451246ca96e478ffef6bec5069dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1650125952
 GameObject:
   m_ObjectHideFlags: 0
