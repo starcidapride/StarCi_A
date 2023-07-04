@@ -5,7 +5,7 @@ using UnityEngine;
 
 using static Constants.MongoDBAtlas;
 
-public class Users
+public class UserDocument
 {
     public ObjectId _id { set; get; }
 
@@ -41,9 +41,9 @@ public class MongoDBUtils
     {
         try
         {
-            var usersCollection = getDatabase().GetCollection<Users>("users");
+            var usersCollection = getDatabase().GetCollection<UserDocument>("users");
 
-            var filter = Builders<Users>.Filter.Eq(user => user.Username, username);
+            var filter = Builders<UserDocument>.Filter.Eq(user => user.Username, username);
 
             var user = usersCollection.Find(filter).FirstOrDefault();
 
