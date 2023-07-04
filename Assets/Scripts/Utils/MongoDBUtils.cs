@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using UnityEngine;
 
-using static Constants.Database;
+using static Constants.MongoDBAtlas;
 
 public class Users
 {
