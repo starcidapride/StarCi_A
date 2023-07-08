@@ -22,7 +22,10 @@ public enum SceneName : byte
     CardWarehouse,
 
     [Description("Waiting Room")]
-    WaitingRoom
+    WaitingRoom,
+
+    [Description("Home")]
+    Home
 };
 public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 {

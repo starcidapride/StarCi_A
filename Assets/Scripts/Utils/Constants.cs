@@ -1,14 +1,11 @@
 ﻿public class Constants
 {
-    public class MongoDBAtlas
+    public class Apis
     {
-        public static string URI = "mongodb+srv://starci:Cuong123_A@starci.cxxtr5g.mongodb.net/?retryWrites=true&w=majority";
+        public static readonly string SERVER_URL = "https://starci-auth-server.cyclic.app/";
 
-        public static string DATABASE = "StarCi";
+        public static readonly string SIGN_IN_API = SERVER_URL + "/api/auth/sign-in";
 
-        public class Collections
-        {
-            public static string USERS = "users";
-        }
+        public static readonly string SIGN_UP_API = SERVER_URL + "/api/auth/sign-up";
     }
 }

@@ -1,8 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using static MongoDBUtils;
+using static ApiUtils;
+
 public class User
 {
     [JsonProperty("username")]
@@ -53,14 +56,45 @@ public class ComponentDeck
 
 public class TitleScreenManager : Singleton<TitleScreenManager>
 {
-    private async void Start()
+    [SerializeField]
+    private Transform signInModal;
+
+    [SerializeField]
+    private Transform signUpModal;
+
+    public static bool Continue { get; set; }
+    private IEnumerator Start()
     {
-        var authResult = await AuthenticationUtils.InitiateAnonymousSignIn();
-        if (!authResult) return;
+        var authResultTask = AuthenticationUtils.InitiateAnonymousSignIn();
 
-        var username = PlayerPrefs.GetString("username");
+        yield return new WaitUntil(() => authResultTask.IsCompleted);
 
-        if (username == null) return;
+        if (!authResultTask.Result)
+        {
+            var buttons = new List<AlertButton>()
+            {
+                new AlertButton()
+                {
+                    ButtonText = "Quit",
+                    Script = typeof(QuitButtonController)
+                },
+                new AlertButton()
+                {
+                    ButtonText = "Try Again",
+                    Script = typeof(TryAgainConnectButtonController)
+                },
+            };
+            AlertController.Instance.Show(AlertCaption.Error, "Unable to establish an internet connection. Please ensure your network settings are configured correctly and attempt to reconnect.", buttons);
+            
+            yield return new WaitUntil(() => Continue);
+        }
+        
+        var accessToken = GetAuthTokenFromPlayPrefs(AuthTokenType.AccessToken);
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);
+        }
 
     }
 }
