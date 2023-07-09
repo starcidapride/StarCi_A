@@ -13,7 +13,6 @@ public class QuitButtonController : MonoBehaviour
 
     private void OnButtonClick()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }

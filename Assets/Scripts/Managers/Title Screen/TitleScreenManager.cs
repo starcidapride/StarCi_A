@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using static ApiUtils;
-
+using static Constants.ButtonNames;
 public class User
 {
     [JsonProperty("username")]
@@ -56,12 +56,6 @@ public class ComponentDeck
 
 public class TitleScreenManager : Singleton<TitleScreenManager>
 {
-    [SerializeField]
-    private Transform signInModal;
-
-    [SerializeField]
-    private Transform signUpModal;
-
     public static bool Continue { get; set; }
     private IEnumerator Start()
     {
@@ -75,13 +69,13 @@ public class TitleScreenManager : Singleton<TitleScreenManager>
             {
                 new AlertButton()
                 {
-                    ButtonText = "Quit",
+                    ButtonText = QUIT,
                     Script = typeof(QuitButtonController)
                 },
                 new AlertButton()
                 {
-                    ButtonText = "Try Again",
-                    Script = typeof(TryAgainConnectButtonController)
+                    ButtonText = RECONNECT,
+                    Script = typeof(ReconnectButtonController)
                 },
             };
             AlertController.Instance.Show(AlertCaption.Error, "Unable to establish an internet connection. Please ensure your network settings are configured correctly and attempt to reconnect.", buttons);

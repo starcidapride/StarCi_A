@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using static GameObjectUtils;
-public class TitleScreenMenuController : SingletonPersistent<TitleScreenMenuController>
+public class TitleScreenMenuController : Singleton<TitleScreenMenuController>
 {
     [SerializeField]
     private Button signInButton;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1885956174322279190}
   - component: {fileID: 1323166067326568572}
   m_Layer: 5
-  m_Name: Forget Password Button As Text
+  m_Name: Forget Password Text As Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: 15
+  m_PreferredHeight: 30
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -255,7 +255,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 0.78431374, b: 0.78431374, a: 1}
     m_PressedColor: {r: 1, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-    m_DisabledColor: {r: 1, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -288,6 +288,8 @@ GameObject:
   - component: {fileID: 6239430537940272889}
   - component: {fileID: 6239430537940272890}
   - component: {fileID: 9069588108577673228}
+  - component: {fileID: 7295171001606671233}
+  - component: {fileID: 3567792270908159143}
   m_Layer: 5
   m_Name: Sign In Modal
   m_TagString: Untagged
@@ -346,7 +348,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a29b9d04ea4659d4fa95c4f312eb3967, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 00b78641a9358764aab300776341cb00, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -383,12 +385,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 30
-    m_Right: 30
-    m_Top: 30
-    m_Bottom: 30
+    m_Left: 60
+    m_Right: 60
+    m_Top: 60
+    m_Bottom: 60
   m_ChildAlignment: 0
-  m_Spacing: 20
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -408,11 +410,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d162ff5f013222e40b85e994f57873ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailTextInput: {fileID: 0}
-  passwordTextInput: {fileID: 0}
-  forgetPasswordButtonAsText: {fileID: 0}
-  submitButton: {fileID: 0}
-  cancelButton: {fileID: 0}
+  emailTextInput: {fileID: 6239430537393444996}
+  passwordTextInput: {fileID: 8361632245454458796}
+  forgetPasswordTextAsButton: {fileID: 5086013828337034497}
+  submitButton: {fileID: 6239430537792931942}
+  cancelButton: {fileID: 4225476157431523610}
+--- !u!95 &7295171001606671233
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6239430537940272895}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c0ae6ca03a156c94198cfa40cb424f03, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!225 &3567792270908159143
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6239430537940272895}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6239430538502148631
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +506,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 20
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -536,7 +571,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 20
+  m_Spacing: 40
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -551,6 +586,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6239430539080047032}
     m_Modifications:
+    - target: {fileID: 1675173049055028851, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
+      propertyPath: m_text
+      value: Cancel
+      objectReference: {fileID: 0}
     - target: {fileID: 1675173049055028851, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -641,10 +680,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1675173049984342499, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
       propertyPath: m_Name
-      value: Close Button
+      value: Cancel Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675173049984342500, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
+      propertyPath: m_PreferredWidth
+      value: 350
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
+--- !u!114 &4225476157431523610 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1675173049984342497, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
+  m_PrefabInstance: {fileID: 3286643862894375163}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4225476157431523611 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1675173049984342496, guid: 4839e32b25100dc4481ca7e2f07eda00, type: 3}
@@ -747,10 +801,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7797139607062324331, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
       propertyPath: m_Name
-      value: Confirm Button
+      value: Submit Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797139607062324332, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
+      propertyPath: m_PreferredWidth
+      value: 350
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
+--- !u!114 &6239430537792931942 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7797139607062324329, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
+  m_PrefabInstance: {fileID: 4225476157434981391}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6239430537792931943 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7797139607062324328, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
@@ -763,6 +832,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6239430537940272894}
     m_Modifications:
+    - target: {fileID: 7708790325575788109, guid: 74ecd630de549e946838eba1edba36bb, type: 3}
+      propertyPath: m_PreferredHeight
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 7708790325575788110, guid: 74ecd630de549e946838eba1edba36bb, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1018,6 +1091,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2494032386044878239, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
+      propertyPath: m_InputType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494032386044878239, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
+      propertyPath: m_ContentType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494032386044878239, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
       propertyPath: m_Placeholder
       value: 
       objectReference: {fileID: 0}
@@ -1032,6 +1113,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2494032385421401481, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
   m_PrefabInstance: {fileID: 6239430537296319027}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8361632245454458796 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2494032386044878239, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
+  m_PrefabInstance: {fileID: 6239430537296319027}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8361632245417100571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1039,6 +1131,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6239430538502148630}
     m_Modifications:
+    - target: {fileID: 2494032385421401479, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
+      propertyPath: m_PreferredWidth
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 2494032385421401480, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
       propertyPath: m_Name
       value: Email Text Input
@@ -1197,6 +1293,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
+--- !u!114 &6239430537393444996 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2494032386044878239, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}
+  m_PrefabInstance: {fileID: 8361632245417100571}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6239430537792264338 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2494032385421401481, guid: d7c1d06e604d3d44c878bf69c2afc075, type: 3}

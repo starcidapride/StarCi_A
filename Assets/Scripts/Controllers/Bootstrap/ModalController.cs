@@ -48,12 +48,28 @@ public class ModalController : SingletonPersistent<ModalController>
 
     public void InstantiateModal(Transform modal)
     {
+        StartCoroutine(InstantiateModalCoroutine(modal));
+    }
+
+    private IEnumerator InstantiateModalCoroutine(Transform modal)
+    {
         if (!HasActived())
         {
             Show();
         }
 
         var modalInstance = Instantiate(modal, modalsContainer);
+
+        SetInteractability(modalInstance, false);
+
+        var animator = modalInstance.GetComponent<Animator>();
+
+        animator.enabled = true;
+
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
+
+        SetInteractability(modalInstance);
+
         modalInstance.name = modal.name;
 
         modalInstance.localPosition = Vector2.zero;
@@ -61,9 +77,7 @@ public class ModalController : SingletonPersistent<ModalController>
         var closestYoungerSibling = GetClosestSiblingGameObject(modalInstance);
         if (closestYoungerSibling != null)
         {
-            var canvasGroup = closestYoungerSibling.GetComponent<CanvasGroup>();
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+            SetInteractability(closestYoungerSibling, false);
         }
 
     }
@@ -76,16 +90,14 @@ public class ModalController : SingletonPersistent<ModalController>
 
         var oldestSibling = modalsContainer.GetChild(numSiblings - 1);
 
-        var closetYoungerSibling = GetClosestSiblingGameObject(oldestSibling);
+        var closestYoungerSibling = GetClosestSiblingGameObject(oldestSibling);
 
         Destroy(oldestSibling.gameObject);
 
-        if (closetYoungerSibling != null)
+        if (closestYoungerSibling != null)
         {
-            var group = closetYoungerSibling.GetComponent<CanvasGroup>();
-            group.interactable = true;
-            group.blocksRaycasts = true;
 
+            SetInteractability(closestYoungerSibling, false);
             return;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using TMPro;
@@ -51,7 +52,13 @@ public class AlertController : SingletonPersistent<AlertController>
         alertBackdrop.gameObject.SetActive(false);
         messageBox.gameObject.SetActive(false);
     }
+
     public void Show(AlertCaption caption, string message, List<AlertButton> buttons = null)
+    {
+        StartCoroutine(ShowCoroutine(caption, message, buttons));
+    }
+
+    private IEnumerator ShowCoroutine(AlertCaption caption, string message, List<AlertButton> buttons = null)
     {
 
         if (buttons != null && (buttons.Count < 0 || buttons.Count > 2))
@@ -72,11 +79,15 @@ public class AlertController : SingletonPersistent<AlertController>
             if (!script.IsSubclassOf(typeof(UnityEngine.Component))) 
                 throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
 
+            button2.GetComponentInChildren<TMP_Text>().text = buttons[0].ButtonText ;
             button2.gameObject.AddComponent(script);
 
         }
         else
         {
+            var buttonText1  = buttons[0].ButtonText;
+            var buttonText2 = buttons[1].ButtonText;
+
             Type script1 = buttons[0].Script;
             Type script2 = buttons[1].Script;
 
@@ -88,9 +99,18 @@ public class AlertController : SingletonPersistent<AlertController>
 
             button1.gameObject.AddComponent(script1);
             button2.gameObject.AddComponent(script2);
+
+            button1.GetComponentInChildren<TMP_Text>().text = buttonText1;
+            button2.GetComponentInChildren <TMP_Text>().text = buttonText2;
         }
 
         alertBackdrop.gameObject.SetActive(true);
+
         messageBox.gameObject.SetActive(true);
+
+        var animator = messageBox.gameObject.GetComponent<Animator>();
+        animator.enabled = true;
+
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
     }
 }

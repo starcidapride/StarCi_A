@@ -8,4 +8,15 @@
 
         public static readonly string SIGN_UP_API = SERVER_URL + "/api/auth/sign-up";
     }
+
+    public class ButtonNames
+    {
+        public static readonly string QUIT = "Quit";
+
+        public static readonly string RECONNECT = "Reconnect";
+
+        public static readonly string CANCEL = "Cancel";
+
+        public static readonly string RESENT = "Resent";
+    }
 }

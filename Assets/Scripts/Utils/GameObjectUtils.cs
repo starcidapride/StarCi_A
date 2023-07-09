@@ -64,4 +64,11 @@ public class GameObjectUtils
         }
     }
 
+    public static void SetInteractability(Transform transform, bool state = true)
+    {
+        var canvasGroup = transform.GetComponent<CanvasGroup>();
+
+            canvasGroup.interactable = state;
+            canvasGroup.blocksRaycasts = state;
+    }
 }

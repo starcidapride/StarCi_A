@@ -1,14 +1,15 @@
 ﻿using Newtonsoft.Json;
+using System.Net.Http;
 using UnityEngine;
+
+public enum AuthTokenType
+{
+    AccessToken,
+    RefreshToken
+}
 
 public class ApiUtils
 {
-    public enum AuthTokenType
-    {
-        AccessToken,
-        RefreshToken
-    }
-
     public class AuthTokenSet
     {
         [JsonProperty("accessToken")]
@@ -38,7 +39,7 @@ public class ApiUtils
         [JsonProperty("lastName")]
         public string LastName { get; set; }
     }
-public static string GetAuthTokenFromPlayPrefs(AuthTokenType tokenType)
+    public static string GetAuthTokenFromPlayPrefs(AuthTokenType tokenType)
     {
         return tokenType switch
         {
@@ -47,4 +48,20 @@ public static string GetAuthTokenFromPlayPrefs(AuthTokenType tokenType)
         }; 
     }
 
+    public static void SaveAuthenticationTokens(string accessToken = null, string refreshToken = null)
+    {
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            PlayerPrefs.SetString("AccessToken", accessToken);
+        }
+
+        if (!string.IsNullOrEmpty(refreshToken))
+        {
+            PlayerPrefs.SetString("RefreshToken", refreshToken);
+        }
+    }
 }
+
+public delegate void ClientErrorHandler(HttpRequestException ex);
+
+public delegate void FailedResponseHandler(string response);

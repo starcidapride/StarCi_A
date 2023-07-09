@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ModalCancelButtonHandler : MonoBehaviour
+public class ModalCancelButtonController : MonoBehaviour
 {
     private Button button;
 
