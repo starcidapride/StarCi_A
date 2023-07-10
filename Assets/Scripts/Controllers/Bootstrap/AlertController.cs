@@ -69,48 +69,51 @@ public class AlertController : SingletonPersistent<AlertController>
 
         messageText.text = message;
 
-
-        if (buttons != null && buttons.Count == 1)
+        if (buttons != null)
         {
-            button2.gameObject.SetActive(true);
+            if (buttons.Count == 1)
+            {
+                button2.gameObject.SetActive(true);
 
-            Type script = buttons[0].Script;
+                Type script = buttons[0].Script;
 
-            if (!script.IsSubclassOf(typeof(UnityEngine.Component))) 
-                throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
+                if (!script.IsSubclassOf(typeof(UnityEngine.Component)))
+                    throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
 
-            button2.GetComponentInChildren<TMP_Text>().text = buttons[0].ButtonText ;
-            button2.gameObject.AddComponent(script);
+                button2.GetComponentInChildren<TMP_Text>().text = buttons[0].ButtonText;
+                button2.gameObject.AddComponent(script);
 
+            }
+            else
+            {
+                var buttonText1 = buttons[0].ButtonText;
+                var buttonText2 = buttons[1].ButtonText;
+
+                Type script1 = buttons[0].Script;
+                Type script2 = buttons[1].Script;
+
+                if (!script1.IsSubclassOf(typeof(UnityEngine.Component)) || !script2.IsSubclassOf(typeof(UnityEngine.Component)))
+                    throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
+
+                button1.gameObject.SetActive(true);
+                button2.gameObject.SetActive(true);
+
+                button1.gameObject.AddComponent(script1);
+                button2.gameObject.AddComponent(script2);
+
+                button1.GetComponentInChildren<TMP_Text>().text = buttonText1;
+                button2.GetComponentInChildren<TMP_Text>().text = buttonText2;
+            }
         }
-        else
-        {
-            var buttonText1  = buttons[0].ButtonText;
-            var buttonText2 = buttons[1].ButtonText;
 
-            Type script1 = buttons[0].Script;
-            Type script2 = buttons[1].Script;
+            alertBackdrop.gameObject.SetActive(true);
 
-            if (!script1.IsSubclassOf(typeof(UnityEngine.Component)) || !script2.IsSubclassOf(typeof(UnityEngine.Component)))
-                throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
+            messageBox.gameObject.SetActive(true);
 
-            button1.gameObject.SetActive(true);
-            button2.gameObject.SetActive(true);
+            var animator = messageBox.gameObject.GetComponent<Animator>();
+            animator.enabled = true;
 
-            button1.gameObject.AddComponent(script1);
-            button2.gameObject.AddComponent(script2);
-
-            button1.GetComponentInChildren<TMP_Text>().text = buttonText1;
-            button2.GetComponentInChildren <TMP_Text>().text = buttonText2;
-        }
-
-        alertBackdrop.gameObject.SetActive(true);
-
-        messageBox.gameObject.SetActive(true);
-
-        var animator = messageBox.gameObject.GetComponent<Animator>();
-        animator.enabled = true;
-
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
+            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
+        
     }
 }

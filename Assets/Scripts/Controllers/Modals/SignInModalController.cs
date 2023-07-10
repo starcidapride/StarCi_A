@@ -10,10 +10,14 @@ using UnityEngine.UI;
 
 using static AuthApiService;
 using static ApiUtils;
+using static ImageUtils;
 using static Constants.ButtonNames;
 
 public class SignInModalController : Singleton<SignInModalController>
 {
+    [SerializeField]
+    private UserInventory inventory;
+
     [SerializeField]
     private TMP_InputField emailTextInput;
 
@@ -67,10 +71,14 @@ public class SignInModalController : Singleton<SignInModalController>
 
     }
 
-    private async void OnSubmitButtonClick()
+    private void OnSubmitButtonClick()
+    {
+        StartCoroutine(OnSubmitButtonClickCoroutine());
+    }
+    private IEnumerator OnSubmitButtonClickCoroutine()
     {
 
-        var response = await ExecuteSignIn(
+        var responseTask = ExecuteSignIn(
             new SignInRequest()
             {
                 Email = email,
@@ -79,10 +87,37 @@ public class SignInModalController : Singleton<SignInModalController>
             , ClientErrorHandler
         );
 
-        Debug.Log( response );
-        if (response == null) return;
+        yield return new WaitUntil(() => responseTask.IsCompleted);
+
+        var response = responseTask.Result;
+
+        if (response == null) yield break;
 
         SaveAuthenticationTokens(response.AuthTokenSet.AccessToken, response.AuthTokenSet.RefreshToken);
+
+        var user = response.PresentableUser;
+
+        inventory.email = user.Email;
+
+        inventory.username = user.Username;
+
+        inventory.picture = DecodeBase64Image(user.Picture);
+
+        inventory.bio = user.Bio;
+
+        inventory.firstName = user.FirstName;
+
+        inventory.lastName = user.LastName;
+
+        AlertController.Instance.Show(AlertCaption.Success, "Sign in successfully.");
+
+        yield return new WaitForSeconds(3);
+
+        AlertController.Instance.Hide();
+
+        ModalController.Instance.CloseNearestModal();
+
+        LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);
     }
 
     public class FailedResponse

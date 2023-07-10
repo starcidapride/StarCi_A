@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d162ff5f013222e40b85e994f57873ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventory: {fileID: 11400000, guid: e3912c8cd34fa8f48bec1b1aca58a4dd, type: 2}
   emailTextInput: {fileID: 6239430537393444996}
   passwordTextInput: {fileID: 8361632245454458796}
   forgetPasswordTextAsButton: {fileID: 5086013828337034497}

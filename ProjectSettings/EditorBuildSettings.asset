@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Title Screen.unity
     guid: c8128a4d008c1b145a7a69c5a799adc9
+  - enabled: 1
+    path: Assets/Scenes/Home.unity
+    guid: 387bcb3cc4b6f254fa75a7832ec2d5a5
   m_configObjects: {}
