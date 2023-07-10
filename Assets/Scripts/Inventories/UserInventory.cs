@@ -17,7 +17,6 @@ public class UserInventory : ScriptableObject
 
     public string Email
     {
-        get { return email; }
         set
         {
             if (email != value)
@@ -30,7 +29,6 @@ public class UserInventory : ScriptableObject
 
     public string Username
     {
-        get { return username; }
         set
         {
             if (username != value)
@@ -43,7 +41,6 @@ public class UserInventory : ScriptableObject
 
     public Texture2D Picture
     {
-        get { return picture; }
         set
         {
             if (picture != value)
@@ -56,7 +53,6 @@ public class UserInventory : ScriptableObject
 
     public string Bio
     {
-        get { return bio; }
         set
         {
             if (bio != value)
@@ -69,7 +65,6 @@ public class UserInventory : ScriptableObject
 
     public string FirstName
     {
-        get { return firstName; }
         set
         {
             if (firstName != value)
@@ -82,7 +77,6 @@ public class UserInventory : ScriptableObject
 
     public string LastName
     {
-        get { return lastName; }
         set
         {
             if (lastName != value)

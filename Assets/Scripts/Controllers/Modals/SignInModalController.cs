@@ -109,7 +109,7 @@ public class SignInModalController : Singleton<SignInModalController>
 
         inventory.lastName = user.LastName;
 
-        AlertController.Instance.Show(AlertCaption.Success, "Sign in successfully.");
+        AlertController.Instance.Show(AlertCaption.Success, "Sign in was successful. You will now be redirected to the home page.");
 
         yield return new WaitForSeconds(3);
 
