@@ -7,6 +7,7 @@ using static ApiUtils;
 using static Constants.ButtonNames;
 using static AuthApiService;
 using static ImageUtils;
+using System.Net.Http;
 
 public class User
 {
@@ -94,13 +95,18 @@ public class BootstrapManager : Singleton<BootstrapManager>
 
         if (!string.IsNullOrEmpty(accessToken))
         {
-            var initTask = ExecuteInit();
+            var initTask = ExecuteInit(ClientErrorHandler);
 
             yield return new WaitUntil(() => initTask.IsCompleted);
 
             var user = initTask.Result;
 
-            Debug.Log(inventory);
+            if (user == null)
+            {
+                yield break;
+            }
+
+            inventory.Init();
 
             inventory.UpdateUser(
                 new UserInventoryDTO()
@@ -125,6 +131,10 @@ public class BootstrapManager : Singleton<BootstrapManager>
         {
             LoadingSceneManager.Instance.LoadScene(SceneName.Authentication, false);
         }
+    }
 
+    private void ClientErrorHandler(HttpRequestException ex)
+    {
+        Debug.Log(ex);
     }
 }

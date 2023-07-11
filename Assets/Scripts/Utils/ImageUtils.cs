@@ -1,6 +1,7 @@
-﻿using System;
+﻿using SFB;
+using System;
 using System.IO;
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ImageUtils
@@ -34,7 +35,19 @@ public class ImageUtils
 
     public static Texture2D LoadImageFromFile()
     {
-        string imagePath = EditorUtility.OpenFilePanel("Select image (.png, .jpg, .jpeg)", "", "png,jpg,jpeg");
+      
+
+       
+
+        var extension = new[] {
+            new ExtensionFilter("Image Files", "png", "jpg", "jpeg" ),
+        };
+
+        var imagePaths = StandaloneFileBrowser.OpenFilePanel("Select picture", "", extension, false);
+
+        if (imagePaths.Length == 0) return null;
+
+        var imagePath = imagePaths[0];
 
         if (string.IsNullOrEmpty(imagePath)) return null;
 

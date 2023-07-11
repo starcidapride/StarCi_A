@@ -2,18 +2,18 @@
 
 public class LoadingController : SingletonPersistent<LoadingController>
 {
-
     [SerializeField]
-    private Transform loadingSpinner;
+    private Transform loadingBackdrop;
+
 
     public static bool modalActive = false;
 
     public void Hide()
     {
-        loadingSpinner.gameObject.SetActive(false);
+        loadingBackdrop.gameObject.SetActive(false);
     }
-    public void Show(string caption, string message)
+    public void Show()
     {
-        loadingSpinner.gameObject.SetActive(true);
+        loadingBackdrop.gameObject.SetActive(true);
     }
 }

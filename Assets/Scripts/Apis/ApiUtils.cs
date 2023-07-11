@@ -83,10 +83,7 @@ public class ApiUtils
 
         var response = await client.GetAsync(REFRESH_API);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new HttpRequestException("The refresh token has become invalid due to expiration.");
-        }
+        if (!response.IsSuccessStatusCode) return null;
 
         var data = await response.Content.ReadAsStringAsync();
 
@@ -101,3 +98,5 @@ public class ApiUtils
 public delegate void ClientErrorHandler(HttpRequestException ex);
 
 public delegate void FailedResponseHandler(string response);
+
+public delegate void RefreshTokenExpirationHandler();

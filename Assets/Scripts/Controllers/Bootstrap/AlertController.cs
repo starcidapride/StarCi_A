@@ -53,7 +53,6 @@ public class AlertController : SingletonPersistent<AlertController>
     public void Hide()
     {
         alertBackdrop.gameObject.SetActive(false);
-        messageBox.gameObject.SetActive(false);
     }
 
     public void Show(AlertCaption caption, string message, List<AlertButton> buttons = null)
@@ -110,8 +109,6 @@ public class AlertController : SingletonPersistent<AlertController>
         }
 
             alertBackdrop.gameObject.SetActive(true);
-
-            messageBox.gameObject.SetActive(true);
 
             yield return WaitForAnimationCompletion(messageBox);
         

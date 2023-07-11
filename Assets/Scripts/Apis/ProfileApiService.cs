@@ -5,10 +5,11 @@ using System.Text;
 
 using static Constants.Apis.Profile;
 using static ApiUtils;
+using System.Net;
 
 public class ProfileApiService
 {
-    public class InitUserDetailsRequest
+    public class SetupProflieRequest
     {
         [JsonProperty("username")]
         public string Username { get; set; }
@@ -20,12 +21,15 @@ public class ProfileApiService
         public string Bio { get; set; }
     }
 
-    public static async Task<PresentableUser> ExecuteInitUserDetails(InitUserDetailsRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null)
+    public static async Task<PresentableUser> ExecuteSetupProfle(SetupProflieRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
 
+        LoadingController.Instance.Show();
         try
         {
+            AttachAuthTokenToHttpRequestHeader(client, AuthTokenType.AccessToken);
+
             var jsonBody = JsonConvert.SerializeObject(request);
 
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
@@ -34,13 +38,28 @@ public class ProfileApiService
 
             var data = await response.Content.ReadAsStringAsync();
 
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                var refreshResponse = await ExecuteRefresh();
+
+                if (refreshResponse == null)
+                {
+                    refreshTokenExpirationHandler?.Invoke();
+
+                    return null;
+                }
+
+                return await ExecuteSetupProfle(request, clientErrorHandler);
+            }
             if (!response.IsSuccessStatusCode)
             {
                 failedResponseHandler?.Invoke(data);
 
+                LoadingController.Instance.Hide();
                 return null;
             }
 
+            LoadingController.Instance.Hide();
             return JsonConvert.DeserializeObject<PresentableUser>(data);
 
         }
@@ -48,6 +67,7 @@ public class ProfileApiService
         {
             clientErrorHandler?.Invoke(ex);
 
+            LoadingController.Instance.Hide();
             return null;
         }
     }

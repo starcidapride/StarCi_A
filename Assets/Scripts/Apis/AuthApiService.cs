@@ -7,7 +7,7 @@ using System.Text;
 
 using static Constants.Apis.Authentication;
 using static ApiUtils;
-
+using System.Diagnostics;
 
 public class AuthApiService
 {
@@ -47,10 +47,11 @@ public class AuthApiService
         public string LastName { get; set; }
     }
 
-    public static async Task<PresentableUser> ExecuteInit(ClientErrorHandler clientErrorHandler = null)
+    public static async Task<PresentableUser> ExecuteInit(ClientErrorHandler clientErrorHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
 
+        LoadingController.Instance.Show();
         try
         {
             AttachAuthTokenToHttpRequestHeader(client, AuthTokenType.AccessToken);
@@ -61,10 +62,16 @@ public class AuthApiService
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                await ExecuteRefresh();
-                await ExecuteInit(clientErrorHandler);
+                var refreshResponse = await ExecuteRefresh();
 
-                return null;
+                if (refreshResponse == null)
+                {
+                    refreshTokenExpirationHandler?.Invoke();
+                    
+                    return null;
+                }
+
+                return await ExecuteInit(clientErrorHandler);
             }
             else
             {
@@ -77,12 +84,18 @@ public class AuthApiService
 
             return null;
         }
+        finally
+        {
+            LoadingController.Instance.Hide();
+        }
     } 
 
     public static async Task<SignInResponse> ExecuteSignIn(SignInRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null)
     {
         using var client = new HttpClient();
-        
+
+        LoadingController.Instance.Show();
+
         try
         {
             var jsonBody = JsonConvert.SerializeObject(request);
@@ -100,7 +113,6 @@ public class AuthApiService
                 return null;
             }
 
-
             return JsonConvert.DeserializeObject<SignInResponse>(data);
 
         }
@@ -110,12 +122,17 @@ public class AuthApiService
 
             return null;
         }
+        finally
+        {
+            LoadingController.Instance.Hide();
+        }
     }
 
     public static async Task<PresentableUser> ExecuteSignUp(SignUpRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null)
     {
         using var client = new HttpClient();
 
+        LoadingController.Instance.Show();
         try
         {
             var jsonBody = JsonConvert.SerializeObject(request);
@@ -133,7 +150,6 @@ public class AuthApiService
                 return null;
             }
 
-
             return JsonConvert.DeserializeObject<PresentableUser>(data);
 
         }
@@ -142,6 +158,10 @@ public class AuthApiService
             clientErrorHandler?.Invoke(ex);
 
             return null;
+        }
+        finally
+        {
+            LoadingController.Instance.Hide();
         }
     }
 }

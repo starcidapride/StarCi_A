@@ -26,6 +26,9 @@ public class ProfileController : Singleton<ProfileController>
     [SerializeField]
     private Transform profileModal;
 
+    [SerializeField]
+    private Texture2D defaultPicture;
+
     void Start()
     {
         RenderDisplay();
@@ -44,7 +47,7 @@ public class ProfileController : Singleton<ProfileController>
     {
         usernameText.text = inventory.username;
         bioText.text = inventory.bio;
-        picture.sprite = CreateSpriteFromTexture(inventory.picture);
+        picture.sprite = CreateSpriteFromTexture(inventory.picture) ?? CreateSpriteFromTexture(defaultPicture);
     }
 
     private void OnProfileButtonClick()

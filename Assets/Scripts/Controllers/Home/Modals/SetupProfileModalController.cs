@@ -74,11 +74,14 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
     }
     private IEnumerator OnUploadPictureButtonClickCoroutine()
     {
+
+        picture = LoadImageFromFile();
+
+        if (picture == null) yield break;
+
         var beforeUploadPicture = presentPicture.sprite;
 
         previousPicture.sprite = beforeUploadPicture;
-
-        picture = LoadImageFromFile();
 
         var updatePicture = CreateSpriteFromTexture(picture);
 
@@ -94,13 +97,14 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
 
     private async void OnSubmitButtonClick()
     {
-        await ExecuteInitUserDetails(
-            new InitUserDetailsRequest()
+        await ExecuteSetupProfle
+            (
+            new SetupProflieRequest()
             {
                 Username = username,             
                 Picture = EncodeBase64Image(picture),       
                 Bio = bio
-            }, ClientErrorHandler
+            }, ClientErrorHandler, X
             );
 
         inventory.UpdateUser(
@@ -117,6 +121,10 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
         HomeManager.Instance.DisplayProfileUI();
     }
 
+    private void X(string ex)
+    {
+        Debug.Log(ex);
+    }
     private void ClientErrorHandler(HttpRequestException ex)
     {
         Debug.Log(ex);
