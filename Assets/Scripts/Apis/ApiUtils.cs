@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using UnityEngine;
 
+using static Constants.Apis.Authentication;
 public enum AuthTokenType
 {
     AccessToken,
@@ -43,8 +46,8 @@ public class ApiUtils
     {
         return tokenType switch
         {
-            AuthTokenType.AccessToken => PlayerPrefs.GetString("accessToken"),
-            _ => PlayerPrefs.GetString("refreshToken"),
+            AuthTokenType.AccessToken => PlayerPrefs.GetString("AccessToken"),
+            _ => PlayerPrefs.GetString("RefreshToken"),
         }; 
     }
 
@@ -59,6 +62,39 @@ public class ApiUtils
         {
             PlayerPrefs.SetString("RefreshToken", refreshToken);
         }
+    }
+
+    public static void AttachAuthTokenToHttpRequestHeader(HttpClient client, AuthTokenType tokenType)
+    {
+        var token = GetAuthTokenFromPlayPrefs(tokenType);
+
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new HttpRequestException("Authorization token could not be retrieved from storage.");
+        }
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    public static async Task<AuthTokenSet> ExecuteRefresh()
+    {
+        using var client = new HttpClient();
+        AttachAuthTokenToHttpRequestHeader(client, AuthTokenType.RefreshToken);
+
+        var response = await client.GetAsync(REFRESH_API);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException("The refresh token has become invalid due to expiration.");
+        }
+
+        var data = await response.Content.ReadAsStringAsync();
+
+        var authTokens = JsonConvert.DeserializeObject<AuthTokenSet>(data);
+
+        SaveAuthenticationTokens(authTokens.AccessToken, authTokens.RefreshToken);
+
+        return authTokens;
     }
 }
 

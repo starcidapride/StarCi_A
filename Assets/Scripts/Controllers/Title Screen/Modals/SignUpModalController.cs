@@ -56,7 +56,15 @@ public class SignUpModalController : Singleton<SignUpModalController>
     private string email, password, confirm, firstName, lastName;
     private void Start()
     {
-        Init();
+        email = emailTextInput.text;
+
+        password = passwordTextInput.text;  
+
+        confirm = confirmTextInput.text;
+
+        firstName = firstNameTextInput.text;
+
+        lastName = lastNameTextInput.text;
 
         emailTextInput.onEndEdit.AddListener(OnEmailTextInputEndEdit);
 
@@ -130,8 +138,8 @@ public class SignUpModalController : Singleton<SignUpModalController>
                 FirstName = firstName,
                 LastName = lastName,
 
-            }, FailedResponseHandler,
-               ClientErrorHandler
+            }, ClientErrorHandler,
+            FailedResponseHandler
             );
 
         if (response == null) return;

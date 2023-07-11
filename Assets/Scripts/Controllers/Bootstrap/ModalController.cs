@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using static GameObjectUtils;
+using static AnimatorUtils;
+
 public class ModalController : SingletonPersistent<ModalController>
 {
     [SerializeField]
@@ -60,15 +62,7 @@ public class ModalController : SingletonPersistent<ModalController>
 
         var modalInstance = Instantiate(modal, modalsContainer);
 
-        SetInteractability(modalInstance, false);
-
-        var animator = modalInstance.GetComponent<Animator>();
-
-        animator.enabled = true;
-
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
-
-        SetInteractability(modalInstance);
+        yield return WaitForAnimationCompletion(modalInstance);
 
         modalInstance.name = modal.name;
 

@@ -6,7 +6,10 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+
 using static EnumUtils;
+using static AnimatorUtils;
+
 public enum AlertCaption
 {
     [Description("Success")]
@@ -110,10 +113,7 @@ public class AlertController : SingletonPersistent<AlertController>
 
             messageBox.gameObject.SetActive(true);
 
-            var animator = messageBox.gameObject.GetComponent<Animator>();
-            animator.enabled = true;
-
-            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
+            yield return WaitForAnimationCompletion(messageBox);
         
     }
 }

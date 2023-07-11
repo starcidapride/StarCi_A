@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43a28525aa5c224ea4c0c86ed5b9bdf, type: 3}
   m_Name: User
   m_EditorClassIdentifier: 
-  email: 
+  email: cuongnvtse160875@fpt.edu.vn
   username: 
   picture: {fileID: 0}
-  bio: 
-  firstName: 
-  lastName: 
+  bio: 2
+  firstName: John
+  lastName: Doe

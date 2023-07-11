@@ -35,11 +35,12 @@ public class SignInModalController : Singleton<SignInModalController>
 
     private string email, password;
 
+
     private void Start()
     {
-        Init();
+        email = emailTextInput.text;
 
-        email = string.Empty; password = string.Empty;
+        password = passwordTextInput.text;
 
         emailTextInput.onEndEdit.AddListener(OnEmailTextInputEndEdit);
 
@@ -83,8 +84,9 @@ public class SignInModalController : Singleton<SignInModalController>
             {
                 Email = email,
                 Password = password
-            }, FailedResponseHandler
-            , ClientErrorHandler
+            }, ClientErrorHandler, 
+            FailedResponseHandler
+
         );
 
         yield return new WaitUntil(() => responseTask.IsCompleted);
@@ -93,6 +95,7 @@ public class SignInModalController : Singleton<SignInModalController>
 
         if (response == null) yield break;
 
+        Debug.Log(response.AuthTokenSet.AccessToken);
         SaveAuthenticationTokens(response.AuthTokenSet.AccessToken, response.AuthTokenSet.RefreshToken);
 
         var user = response.PresentableUser;

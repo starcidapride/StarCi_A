@@ -1,5 +1,20 @@
 using UnityEngine;
 
+public class UserInventoryDTO
+{
+    public string Email { get; set; }
+
+    public string Username { get; set; }
+
+    public Texture2D Picture { get; set; }
+
+    public string Bio { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+}
+
 [CreateAssetMenu(fileName = "User", menuName = "Inventories/User")]
 public class UserInventory : ScriptableObject
 {
@@ -15,76 +30,44 @@ public class UserInventory : ScriptableObject
 
     public string lastName;
 
-    public string Email
+    public void UpdateUser(UserInventoryDTO user)
     {
-        set
+        if (user.Email != null)
         {
-            if (email != value)
-            {
-                email = value;
-                ExecuteInventoryTrigger();
-            }
+            email = user.Email;
+        }
+
+        if (user.Username != null)
+        {
+            username = user.Username;
+        }
+
+        if (user.Picture != null)
+        {
+            picture = user.Picture;
+        }
+
+        if (user.Bio != null)
+        {
+            bio = user.Bio;
+        }
+
+        if (user.FirstName != null)
+        {
+            firstName = user.FirstName;
+        }
+
+        if (user.LastName != null)
+        {
+            lastName = user.LastName;
         }
     }
 
-    public string Username
+    public void UpdateUserThenNotify(UserInventoryDTO user)
     {
-        set
-        {
-            if (username != value)
-            {
-                username = value;
-                ExecuteInventoryTrigger();
-            }
-        }
-    }
+        UpdateUser(user);
 
-    public Texture2D Picture
-    {
-        set
-        {
-            if (picture != value)
-            {
-                picture = value;
-                ExecuteInventoryTrigger();
-            }
-        }
-    }
-
-    public string Bio
-    {
-        set
-        {
-            if (bio != value)
-            {
-                bio = value;
-                ExecuteInventoryTrigger();
-            }
-        }
-    }
-
-    public string FirstName
-    {
-        set
-        {
-            if (firstName != value)
-            {
-                firstName = value;
-                ExecuteInventoryTrigger();
-            }
-        }
-    }
-
-    public string LastName
-    {
-        set
-        {
-            if (lastName != value)
-            {
-                lastName = value;
-                ExecuteInventoryTrigger();
-            }
-        }
+        ExecuteInventoryTrigger();
     }
 
     public void Init()

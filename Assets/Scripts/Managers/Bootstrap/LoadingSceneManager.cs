@@ -12,8 +12,8 @@ public enum SceneName : byte
     [Description("Bootstrap")]
     Bootstrap,
 
-    [Description("Title Screen")]
-    TitleScreen,
+    [Description("Authentication")]
+    Authentication,
 
     [Description("Lobby")]
     Lobby,
@@ -40,7 +40,6 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
     private void OnSceneChange(Scene scene, LoadSceneMode mode)
     {
-
         var sceneName = GetEnumValueByDescription<SceneName>(scene.name);
 
         switch (sceneName)

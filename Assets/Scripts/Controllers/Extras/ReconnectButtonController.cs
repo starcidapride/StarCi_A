@@ -16,7 +16,7 @@ public class ReconnectButtonController : MonoBehaviour
         var authResult = await AuthenticationUtils.InitiateAnonymousSignIn();
         if (authResult)
         {
-            TitleScreenManager.Continue = true;
+            BootstrapManager.Continue = true;
         }
     }
 }
