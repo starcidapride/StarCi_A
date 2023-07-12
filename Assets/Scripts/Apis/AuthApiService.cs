@@ -7,46 +7,12 @@ using System.Text;
 
 using static Constants.Apis.Authentication;
 using static ApiUtils;
-using System.Diagnostics;
+using static UserDto;
+using static AuthApiDto;
 
 public class AuthApiService
 {
-    public class SignInRequest
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("password")]
-        public string Password { get; set; }
-    }
-
-    public class SignInResponse
-    {
-        [JsonProperty("authTokenSet")]
-        public AuthTokenSet AuthTokenSet { get; set; }
-
-        [JsonProperty("presentableUser")]
-        public PresentableUser PresentableUser { get; set; }
-    }
-
-    public class SignUpRequest
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("password")]
-        public string Password { get; set; }
-
-        [JsonProperty("confirm")]
-        public string Confirm { get; set; }
-
-        [JsonProperty("firstName")]
-        public string FirstName { get; set; }
-
-        [JsonProperty("lastName")]
-        public string LastName { get; set; }
-    }
-
+  
     public static async Task<PresentableUser> ExecuteInit(ClientErrorHandler clientErrorHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
@@ -108,7 +74,7 @@ public class AuthApiService
 
             if (!response.IsSuccessStatusCode)
             {
-                failedResponseHandler?.Invoke(data);
+                failedResponseHandler?.Invoke(data, response.StatusCode);
 
                 return null;
             }
@@ -145,7 +111,7 @@ public class AuthApiService
 
             if (!response.IsSuccessStatusCode)
             {
-                failedResponseHandler?.Invoke(data);
+                failedResponseHandler?.Invoke(data, response.StatusCode);
 
                 return null;
             }

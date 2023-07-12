@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 using static Constants.Apis.Authentication;
+using static AuthApiDto;
+using System.Net;
+
 public enum AuthTokenType
 {
     AccessToken,
@@ -13,35 +16,7 @@ public enum AuthTokenType
 
 public class ApiUtils
 {
-    public class AuthTokenSet
-    {
-        [JsonProperty("accessToken")]
-    public string AccessToken { get; set; }
-    [JsonProperty("refreshToken")]
-    public string RefreshToken { get; set; }
 
-}
-
-    public class PresentableUser
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("username")]
-        public string Username { get; set; }
-
-        [JsonProperty("picture")]
-        public string Picture { get; set; }
-
-        [JsonProperty("bio")]
-        public string Bio { get; set; }
-
-        [JsonProperty("firstName")]
-        public string FirstName { get; set; }
-
-        [JsonProperty("lastName")]
-        public string LastName { get; set; }
-    }
     public static string GetAuthTokenFromPlayPrefs(AuthTokenType tokenType)
     {
         return tokenType switch
@@ -97,6 +72,6 @@ public class ApiUtils
 
 public delegate void ClientErrorHandler(HttpRequestException ex);
 
-public delegate void FailedResponseHandler(string response);
+public delegate void FailedResponseHandler(string response, HttpStatusCode code);
 
 public delegate void RefreshTokenExpirationHandler();

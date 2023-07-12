@@ -84,6 +84,10 @@
     <Compile Include="Assets\Scripts\Controllers\Bootstrap\LoadingFadeEffectController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\ResentButtonController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Title Screen\Modals\SignUpModalController.cs" />
+    <Compile Include="Assets\CardWarehouseManager.cs" />
+    <Compile Include="Assets\Scripts\Dtos\UserDto.cs" />
+    <Compile Include="Assets\Scripts\Dtos\Apis\AuthApiDto.cs" />
+    <Compile Include="Assets\Scripts\Dtos\Apis\ProfileApiDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

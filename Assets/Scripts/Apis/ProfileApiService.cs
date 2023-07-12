@@ -2,25 +2,17 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
+using System.Net;
 
 using static Constants.Apis.Profile;
 using static ApiUtils;
-using System.Net;
+using static ProfileApiDto;
+using static AuthApiDto;
+
 
 public class ProfileApiService
 {
-    public class SetupProflieRequest
-    {
-        [JsonProperty("username")]
-        public string Username { get; set; }
-
-        [JsonProperty("picture")]
-        public string Picture { get; set; }
-
-        [JsonProperty("bio")]
-        public string Bio { get; set; }
-    }
-
+   
     public static async Task<PresentableUser> ExecuteSetupProfle(SetupProflieRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
@@ -53,7 +45,7 @@ public class ProfileApiService
             }
             if (!response.IsSuccessStatusCode)
             {
-                failedResponseHandler?.Invoke(data);
+                failedResponseHandler?.Invoke(data, response.StatusCode);
 
                 LoadingController.Instance.Hide();
                 return null;

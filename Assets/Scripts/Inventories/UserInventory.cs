@@ -1,6 +1,9 @@
+using Newtonsoft.Json;
 using UnityEngine;
+using static UserDto;
 
-public class UserInventoryDTO
+[CreateAssetMenu(fileName = "User", menuName = "Inventories/User")]
+public class UserInventory : ScriptableObject
 {
     public string Email { get; set; }
 
@@ -13,57 +16,34 @@ public class UserInventoryDTO
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
-}
 
-[CreateAssetMenu(fileName = "User", menuName = "Inventories/User")]
-public class UserInventory : ScriptableObject
-{
-    public string email;
+    public DeckCollection DeckCollection { get; set; }
 
-    public string username;
-
-    public Texture2D picture;
-
-    public string bio;
-    
-    public string firstName;
-
-    public string lastName;
-
-    public void UpdateUser(UserInventoryDTO user)
+    public void UpdateUser(User user)
     {
         if (user.Email != null)
-        {
-            email = user.Email;
-        }
+            Email = user.Email;
 
         if (user.Username != null)
-        {
-            username = user.Username;
-        }
+            Username = user.Username;
 
         if (user.Picture != null)
-        {
-            picture = user.Picture;
-        }
+            Picture = user.Picture;
 
         if (user.Bio != null)
-        {
-            bio = user.Bio;
-        }
+            Bio = user.Bio;
 
         if (user.FirstName != null)
-        {
-            firstName = user.FirstName;
-        }
+            FirstName = user.FirstName;
 
         if (user.LastName != null)
-        {
-            lastName = user.LastName;
-        }
+            LastName = user.LastName;
+
+        if (user.DeckCollection != null)
+            DeckCollection = user.DeckCollection;
     }
 
-    public void UpdateUserThenNotify(UserInventoryDTO user)
+    public void UpdateUserThenNotify(User user)
     {
         UpdateUser(user);
 
@@ -72,17 +52,20 @@ public class UserInventory : ScriptableObject
 
     public void Init()
     {
-        email = string.Empty;
+        Email = string.Empty;
 
-        username = string.Empty;
+        Username = string.Empty;
 
-        picture = null;
+        Picture = null;
 
-        bio = string.Empty;
+        Bio = string.Empty;
 
-        firstName = string.Empty;
+        FirstName = string.Empty;
 
-        lastName = string.Empty;
+        LastName = string.Empty;
+
+        DeckCollection = null;
+
     }
 
     public delegate void InventoryTriggeredEventHandler();

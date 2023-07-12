@@ -5,7 +5,7 @@ using System.Net.Http;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using static AuthApiDto;
 using static AuthApiService;
 using static Constants.ButtonNames;
 
@@ -185,19 +185,15 @@ public class SignUpModalController : Singleton<SignUpModalController>
     }
     public class FailedResponse
     {
-        [JsonProperty("statusCode")]
-        public int StatusCode { get; set; }
-
         [JsonProperty("errors")]
         public SignUpErrors Errors { get; set; }
-
     }
 
-    private void FailedResponseHandler(string response)
+    private void FailedResponseHandler(string response, HttpStatusCode code)
     {
         var data = JsonConvert.DeserializeObject<FailedResponse>(response);
 
-        if (data.StatusCode == (int)HttpStatusCode.BadRequest || data.StatusCode == (int)HttpStatusCode.Conflict)
+        if (code == HttpStatusCode.BadRequest || code == HttpStatusCode.Conflict)
         {
 
             var cancelButton = new AlertButton()

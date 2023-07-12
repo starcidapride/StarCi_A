@@ -8,55 +8,8 @@ using static Constants.ButtonNames;
 using static AuthApiService;
 using static ImageUtils;
 using System.Net.Http;
-
-public class User
-{
-    [JsonProperty("username")]
-    public string Username { get; set; }
-
-    [JsonProperty("password")]
-    public string Password { get; set; }
-
-    [JsonProperty("image")]
-    public string Image { get; set; }
-
-    [JsonProperty("bio")]
-    public string Bio { get; set; }
-
-    [JsonProperty("firstName")]
-    public string FirstName { get; set; }
-
-    [JsonProperty("lastName")]
-    public string LastName { get; set; }
-
-    [JsonProperty("deckCollection")]
-    public DeckCollection DeckCollection { get; set; }
-}
-
-public class DeckCollection
-{
-    [JsonProperty("decks")]
-    public List<Deck> Decks { get; set; }
-
-    [JsonProperty("selectedDeckIndex")]
-    public int SelectedDeckIndex { get; set; }
-}
-
-public class Deck
-{
-    [JsonProperty("playDeck")]
-    public ComponentDeck PlayDeck { get; set; }
-
-    [JsonProperty("characterDeck")]
-    public ComponentDeck ComponentDeck { get; set; }
-}
-
-public class ComponentDeck
-{
-    [JsonProperty("cardNames")]
-    public List<string> CardNames;
-}
-
+using static UserDto;
+using static AuthApiDto;
 
 public class BootstrapManager : Singleton<BootstrapManager>
 {
@@ -108,8 +61,10 @@ public class BootstrapManager : Singleton<BootstrapManager>
 
             inventory.Init();
 
+            Debug.Log(JsonConvert.SerializeObject(user));
+
             inventory.UpdateUser(
-                new UserInventoryDTO()
+                new User()
                 {
                     Email = user.Email,
 

@@ -18,7 +18,7 @@ public class HomeManager : Singleton<HomeManager>
 
     private void Start()
     {
-        if (string.IsNullOrEmpty(userInventory.username))
+        if (string.IsNullOrEmpty(userInventory.Username))
         {
             ModalController.Instance.InstantiateModal(setupProfileModal);
             return;

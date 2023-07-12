@@ -11,6 +11,9 @@ using UnityEngine.UI;
 using static ImageUtils;
 using static ProfileApiService;
 using static AnimatorUtils;
+using static ProfileApiDto;
+using static UserDto;
+using System.Net;
 
 public class SetupProfileModalController : Singleton<SetupProfileModalController>
 {
@@ -101,18 +104,18 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
             (
             new SetupProflieRequest()
             {
-                Username = username,             
-                Picture = EncodeBase64Image(picture),       
+                Username = username,
+                Picture = EncodeBase64Image(picture),
                 Bio = bio
             }, ClientErrorHandler, X
             );
 
         inventory.UpdateUser(
-            new UserInventoryDTO()
+            new User
             {
-                Username = username,
-                Picture = picture,
-                Bio = bio
+                    Username = username,
+                    Picture = picture,
+                    Bio = bio
             }
             );
 
@@ -121,7 +124,7 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
         HomeManager.Instance.DisplayProfileUI();
     }
 
-    private void X(string ex)
+    private void X(string ex, HttpStatusCode code)
     {
         Debug.Log(ex);
     }

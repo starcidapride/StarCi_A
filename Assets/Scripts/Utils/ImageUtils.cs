@@ -9,11 +9,22 @@ public class ImageUtils
 
     public static Texture2D DecodeBase64Image(string base64EncodedImage)
     {
-        if (string.IsNullOrEmpty(base64EncodedImage)) return null; 
-        var imageBytes = Convert.FromBase64String(base64EncodedImage);
-        var texture = new Texture2D(1, 1);
-        texture.LoadImage(imageBytes);
-        return texture;
+        if (string.IsNullOrEmpty(base64EncodedImage)) return null;
+        try
+        {
+            var imageBytes = Convert.FromBase64String(base64EncodedImage);
+            var texture = new Texture2D(1, 1);
+
+            texture.LoadImage(imageBytes);
+            return texture;
+        } catch (Exception ex) {
+            
+            Debug.Log(ex); 
+            return null;    
+        
+        }
+
+
     }
 
     public static string EncodeBase64Image(Texture2D texture)
@@ -36,9 +47,6 @@ public class ImageUtils
     public static Texture2D LoadImageFromFile()
     {
       
-
-       
-
         var extension = new[] {
             new ExtensionFilter("Image Files", "png", "jpg", "jpeg" ),
         };

@@ -11,7 +11,10 @@ using UnityEngine.UI;
 using static AuthApiService;
 using static ApiUtils;
 using static ImageUtils;
+using static UserDto;
 using static Constants.ButtonNames;
+using static AuthApiDto;
+using System.Net;
 
 public class SignInModalController : Singleton<SignInModalController>
 {
@@ -98,19 +101,24 @@ public class SignInModalController : Singleton<SignInModalController>
         Debug.Log(response.AuthTokenSet.AccessToken);
         SaveAuthenticationTokens(response.AuthTokenSet.AccessToken, response.AuthTokenSet.RefreshToken);
 
-        var user = response.PresentableUser;
+        var presentableUser = response.PresentableUser;
 
-        inventory.email = user.Email;
+        var user = new User
+        {
+            Email = presentableUser.Email,
 
-        inventory.username = user.Username;
+            Username = presentableUser.Username,
 
-        inventory.picture = DecodeBase64Image(user.Picture);
+            Picture = DecodeBase64Image(presentableUser.Picture),
 
-        inventory.bio = user.Bio;
+            Bio = presentableUser.Bio,
 
-        inventory.firstName = user.FirstName;
+            FirstName = presentableUser.FirstName,
 
-        inventory.lastName = user.LastName;
+            LastName = presentableUser.LastName,
+        };
+
+        inventory.UpdateUser(user);
 
         AlertController.Instance.Show(AlertCaption.Success, "Sign in was successful. You will now be redirected to the home page.");
 
@@ -134,10 +142,9 @@ public class SignInModalController : Singleton<SignInModalController>
         [JsonProperty("error")]
         public string Error { get; set; }
     }
-    private void FailedResponseHandler(string response)
+    private void FailedResponseHandler(string response, HttpStatusCode code)
     {
         var failedResponse = JsonConvert.DeserializeObject<FailedResponse>(response);
-
 
         var cancelButton = new AlertButton()
         {

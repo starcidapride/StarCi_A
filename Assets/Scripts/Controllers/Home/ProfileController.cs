@@ -45,9 +45,9 @@ public class ProfileController : Singleton<ProfileController>
 
     private void RenderDisplay()
     {
-        usernameText.text = inventory.username;
-        bioText.text = inventory.bio;
-        picture.sprite = CreateSpriteFromTexture(inventory.picture) ?? CreateSpriteFromTexture(defaultPicture);
+        usernameText.text = inventory.Username;
+        bioText.text = inventory.Bio;
+        picture.sprite = CreateSpriteFromTexture(inventory.Picture) ?? CreateSpriteFromTexture(defaultPicture);
     }
 
     private void OnProfileButtonClick()
