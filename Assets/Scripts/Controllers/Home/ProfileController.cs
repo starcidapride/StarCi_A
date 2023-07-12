@@ -54,5 +54,8 @@ public class ProfileController : Singleton<ProfileController>
     {
         ModalController.Instance.InstantiateModal(profileModal);
     }
-
+    private void OnDestroy()
+    {
+        inventory.InventoryTriggered -= OnInventoryTriggered;
+    }
 }

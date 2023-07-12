@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UserDto
@@ -9,7 +10,7 @@ public class UserDto
         public int SelectedDeckIndex { get; set; }
 
         [JsonProperty("decks")]
-        public Deck[] Decks { get; set; }
+        public List<Deck> Decks { get; set; }
     }
 
     public class Deck
@@ -28,7 +29,7 @@ public class UserDto
     public class ComponentDeck
     {
         [JsonProperty("cards")]
-        public string[] Cards { get; set; }
+        public List<string> Cards { get; set; }
     }
 
     public class User

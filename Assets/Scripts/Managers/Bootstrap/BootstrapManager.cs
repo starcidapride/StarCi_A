@@ -63,7 +63,7 @@ public class BootstrapManager : Singleton<BootstrapManager>
 
             Debug.Log(JsonConvert.SerializeObject(user));
 
-            inventory.UpdateUser(
+            inventory.UpdateInventory(
                 new User()
                 {
                     Email = user.Email,

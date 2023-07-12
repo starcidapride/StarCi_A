@@ -24,14 +24,14 @@ public class HomeManager : Singleton<HomeManager>
             return;
         }
 
-        DisplayProfileUI();
+        DisplayUI();
     }
 
-    public void DisplayProfileUI()
+    public void DisplayUI()
     {
-        StartCoroutine(DisplayProfileUICoroutine());
+        StartCoroutine(DisplayUICoroutine());
     }
-    public IEnumerator DisplayProfileUICoroutine()
+    public IEnumerator DisplayUICoroutine()
     {
         ui.gameObject.SetActive(true);
 

@@ -110,7 +110,7 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
             }, ClientErrorHandler, X
             );
 
-        inventory.UpdateUser(
+        inventory.UpdateInventory(
             new User
             {
                     Username = username,
@@ -121,7 +121,7 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
 
         ModalController.Instance.CloseNearestModal();
 
-        HomeManager.Instance.DisplayProfileUI();
+        HomeManager.Instance.DisplayUI();
     }
 
     private void X(string ex, HttpStatusCode code)

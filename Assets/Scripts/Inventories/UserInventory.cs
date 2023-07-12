@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 using static UserDto;
 
@@ -19,7 +20,7 @@ public class UserInventory : ScriptableObject
 
     public DeckCollection DeckCollection { get; set; }
 
-    public void UpdateUser(User user)
+    public void UpdateInventory(User user)
     {
         if (user.Email != null)
             Email = user.Email;
@@ -43,9 +44,29 @@ public class UserInventory : ScriptableObject
             DeckCollection = user.DeckCollection;
     }
 
-    public void UpdateUserThenNotify(User user)
+    public void UpdateInventoryThenNotify(User user)
     {
-        UpdateUser(user);
+        UpdateInventory(user);
+
+        ExecuteInventoryTrigger();
+    }
+    
+    public void UpdateSelectedDeckIndex(int index)
+    {
+        DeckCollection.SelectedDeckIndex = index;
+
+        ExecuteInventoryTrigger();
+    }
+
+    public void AddDeck(Deck deck)
+    {   
+        DeckCollection ??= new DeckCollection()
+            {
+                SelectedDeckIndex = 0,
+                Decks = new List<Deck>()
+            };
+
+        DeckCollection.Decks.Add(deck);
 
         ExecuteInventoryTrigger();
     }
@@ -69,6 +90,7 @@ public class UserInventory : ScriptableObject
     }
 
     public delegate void InventoryTriggeredEventHandler();
+
     public event InventoryTriggeredEventHandler InventoryTriggered;
 
     private void ExecuteInventoryTrigger()
