@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{751C2477-C643-3996-E436-4A2E26369362}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -96,22 +97,22 @@
     <Compile Include="Assets\Scripts\Controllers\Authentication\Modals\SignUpModalController.cs" />
     <Compile Include="Assets\Scripts\Cards\CardUtils.cs" />
     <Compile Include="Assets\Scripts\Cards\CardMaps.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Characters\Arthur.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Characters\Cresht.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Characters\Baldum.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\ICard.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Characters\ICharacterCard.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Characters\TelAnnas.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Characters\Peura.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Equipments\FafnirTalon.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Equipments\ShieldOfTheLost.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Equipments\IEquipmentCard.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Others\IOtherCard.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Spells\Cleanse.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Others\Invocation.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Spells\Barrier.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Spells\ISpellCard.cs" />
-    <Compile Include="Assets\Scripts\Cards\Library\Spells\Heal.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Characters\Arthur.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Characters\Cresht.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Characters\Baldum.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\ICard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Characters\ICharacterCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Characters\TelAnnas.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Characters\Peura.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Equipments\FafnirTalon.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Equipments\ShieldOfTheLost.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Equipments\IEquipmentCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Others\IOtherCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Spells\Cleanse.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Others\Invocation.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Spells\Barrier.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Spells\ISpellCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Collection\Spells\Heal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
