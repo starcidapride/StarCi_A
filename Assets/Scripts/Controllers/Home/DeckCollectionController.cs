@@ -4,8 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-using static UserDto;
-
 public class DeckCollectionController : Singleton<DeckCollectionController>
 {
     [SerializeField]

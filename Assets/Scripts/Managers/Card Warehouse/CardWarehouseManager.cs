@@ -17,7 +17,6 @@ public class CardWarehouseManager : Singleton<CardWarehouseManager>
     [SerializeField]
     private Transform ui;
 
-
     private void Start()
     {
         /*if (inventory.DeckCollection == null)

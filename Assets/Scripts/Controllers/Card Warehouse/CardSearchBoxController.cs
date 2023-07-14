@@ -24,12 +24,12 @@ public class CardSearchBoxController : Singleton<CardSearchBoxController>
 
     private void Start()
     {
-        inventory.UpdateInventory(
+        inventory.SetupInventory(
             new CardSearchBox
             {
                 CardName = cardNameTextInput.text,
                 
-                CardTypeInput = (CardTypeDropdown) cardTypeDropdownInput.value,
+                CardType = (CardTypeDropdown) cardTypeDropdownInput.value,
 
                 CharacterRole = (CharacterRoleDropdown) characterRoleDropdownInput.value,
 
@@ -89,4 +89,5 @@ public class CardSearchBoxController : Singleton<CardSearchBoxController>
     {
         inventory.Notify();
     }
+
 }

@@ -7,7 +7,7 @@ public class Baldum : ICharacterCard
     public Texture2D Image { get; } = Resources.Load<Texture2D>(BALDUM_IMAGE + "Image");
     public int Experience { get; } = 1;
 
-    public CharacterRole Role { get; } = CharacterRole.Tank;
+    public CharacterRole CharacterRole { get; } = CharacterRole.Tank;
 
     public int MaxHealth { get; } = 1;
 

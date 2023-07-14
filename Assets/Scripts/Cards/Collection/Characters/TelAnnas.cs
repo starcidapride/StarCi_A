@@ -6,7 +6,7 @@ public class TelAnnas : ICharacterCard
     public Texture2D Image { get; } = Resources.Load<Texture2D>(TEL_ANNAS_IMAGE + "Image");
     public int Experience { get; } = 1;
 
-    public CharacterRole Role { get; } = CharacterRole.Marksman;
+    public CharacterRole CharacterRole { get; } = CharacterRole.Marksman;
 
     public int MaxHealth { get; } = 1;
 

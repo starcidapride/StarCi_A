@@ -5,7 +5,7 @@ using System.Net.Http;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static AuthApiDto;
+
 using static AuthApiService;
 using static Constants.ButtonNames;
 

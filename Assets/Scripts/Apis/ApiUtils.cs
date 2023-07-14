@@ -3,10 +3,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Net;
 
 using static Constants.Apis.Authentication;
-using static AuthApiDto;
-using System.Net;
 
 public enum AuthTokenType
 {

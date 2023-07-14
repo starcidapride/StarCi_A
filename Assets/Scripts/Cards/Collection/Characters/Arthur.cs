@@ -8,7 +8,7 @@ public class Arthur : ICharacterCard
     public Texture2D Image {get; } = Resources.Load<Texture2D>(ARTHUR_IMAGE + "Image");
     public int Experience {get; } = 1;
 
-    public CharacterRole Role {get; } = CharacterRole.Warrior;
+    public CharacterRole CharacterRole {get; } = CharacterRole.Warrior;
 
     public int MaxHealth {get; } = 1;
 

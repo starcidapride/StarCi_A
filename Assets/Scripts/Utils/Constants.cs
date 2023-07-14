@@ -1,4 +1,6 @@
-﻿public class Constants
+﻿using UnityEditor;
+
+public class Constants
 {
     public class Apis
     {
@@ -25,6 +27,24 @@
 
         }
         
+    }
+
+    public class Prefabs
+    {
+        public static readonly string PREFABS_PATH = "Prefabs/";
+
+        public class Cards
+        {
+            public static readonly string CARDS_PATH = PREFABS_PATH + "Cards/";
+
+            public static readonly string CHARACTER_CARD = CARDS_PATH + "Character Card";
+
+            public static readonly string EQUIPMENT_CARD = CARDS_PATH + "Equipment Card";
+
+            public static readonly string SPELL_CARD = CARDS_PATH + "Spell Card";
+
+            public static readonly string OTHER_CARD = CARDS_PATH + "Other Card";
+        }
     }
 
     public class ButtonNames
@@ -121,5 +141,43 @@
 
             public static readonly string INVOCATION_IMAGE = OTHER_CARDS_LOCATION + "Invocation";
         }
+
+        public class Frames
+        {
+            public static readonly string CARD_FRAMES_LOCATION = CARDS_LOCATION + "Frames/";
+
+            public static readonly string INVOCATION_FRAME = CARD_FRAMES_LOCATION + "Invocation Card";
     }
+
+    }
+
+    public class Triggers
+    {
+        public class Card
+        {
+            public static readonly string CARD_INSTANTIATION_TRIGGER = "Card Instantiation Trigger";
+        }
+
+        public class Modal
+        {
+            public class SetupProfileModal
+            {
+                public static readonly string SETUP_PROFILE_MODAL_TRANSITION_TRIGGER = "Setup Profile Modal Transition Trigger";
+            }
+
+        }
+    }
+
+    public class AbilityNames
+    {
+        public static readonly string PASSIVE = "Passive";
+
+        public static readonly string Q = "Q";
+
+        public static readonly string E = "E";
+
+        public static readonly string R = "R";
+
+    }
+
 }

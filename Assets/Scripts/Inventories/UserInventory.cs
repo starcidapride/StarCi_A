@@ -1,7 +1,45 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
-using static UserDto;
+
+public class DeckCollection
+{
+    public int SelectedDeckIndex { get; set; }
+
+    public List<Deck> Decks { get; set; }
+}
+
+public class Deck
+{
+    public string DeckName { get; set; }
+
+    public ComponentDeck PlayDeck { get; set; }
+
+    public ComponentDeck CharacterDeck { get; set; }
+
+}
+
+public class ComponentDeck
+{
+    public List<string> Cards { get; set; }
+}
+
+public class User
+{
+    public string Email { get; set; }
+
+    public string Username { get; set; }
+
+    public Texture2D Picture { get; set; }
+
+    public string Bio { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public DeckCollection DeckCollection { get; set; }
+}
 
 [CreateAssetMenu(fileName = "User", menuName = "Inventories/User")]
 public class UserInventory : ScriptableObject

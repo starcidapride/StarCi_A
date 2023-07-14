@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 using static ApiUtils;
 using static Constants.ButtonNames;
 using static AuthApiService;
 using static ImageUtils;
-using System.Net.Http;
-using static UserDto;
-using static AuthApiDto;
 
 public class BootstrapManager : Singleton<BootstrapManager>
 {

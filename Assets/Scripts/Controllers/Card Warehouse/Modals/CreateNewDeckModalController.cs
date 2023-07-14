@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UserDto;
+
 
 public class CreateNewDeckModalController : Singleton<CreateNewDeckModalController>
 {

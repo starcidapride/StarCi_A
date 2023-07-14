@@ -7,13 +7,12 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net;
 
 using static ImageUtils;
 using static ProfileApiService;
 using static AnimatorUtils;
-using static ProfileApiDto;
-using static UserDto;
-using System.Net;
+using static Constants.Triggers.Modal.SetupProfileModal;
 
 public class SetupProfileModalController : Singleton<SetupProfileModalController>
 {
@@ -90,7 +89,7 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
 
         presentPicture.sprite = updatePicture;
 
-        yield return ExecuteTriggerThenWait(transform, "Transition Trigger");
+        yield return ExecuteTriggerThenWait(transform, SETUP_PROFILE_MODAL_TRANSITION_TRIGGER);
     }
 
     private void OnBioTextInputEndEdit(string value)

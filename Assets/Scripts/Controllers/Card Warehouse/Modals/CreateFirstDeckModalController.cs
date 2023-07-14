@@ -2,8 +2,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using static UserDto;
-
 public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalController>
 {
     [SerializeField]

@@ -7,7 +7,7 @@ public class Peura : ICharacterCard
     public Texture2D Image { get; } = Resources.Load<Texture2D>(PEURA_IMAGE + "Image");
     public int Experience { get; } = 1;
 
-    public CharacterRole Role { get; } = CharacterRole.Support;
+    public CharacterRole CharacterRole { get; } = CharacterRole.Support;
 
     public int MaxHealth { get; } = 1;
 

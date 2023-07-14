@@ -6,10 +6,18 @@ using System.Net;
 
 using static Constants.Apis.Profile;
 using static ApiUtils;
-using static ProfileApiDto;
-using static AuthApiDto;
 
+public class SetupProflieRequest
+{
+    [JsonProperty("username")]
+    public string Username { get; set; }
 
+    [JsonProperty("picture")]
+    public string Picture { get; set; }
+
+    [JsonProperty("bio")]
+    public string Bio { get; set; }
+}
 public class ProfileApiService
 {
    

@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using static UserDto;
 
 public enum CardTypeDropdown
 {
@@ -49,7 +48,7 @@ public class CardSearchBox
 {
     public string CardName { get; set; }
 
-    public CardTypeDropdown CardTypeInput { get; set; }
+    public CardTypeDropdown CardType { get; set; }
     public CharacterRoleDropdown CharacterRole { get; set; }
     public EquipmentClassDropdown EquipmentClass { get; set; }
 }
@@ -74,6 +73,17 @@ public class CardSearchBoxInventory : ScriptableObject
             characterRole = data.CharacterRole;
 
         if (data.CharacterRole != CharacterRoleDropdown.None)
+            equipmentClass = data.EquipmentClass;
+    }
+
+    public void SetupInventory(CardSearchBox data)
+    {
+            cardName = data.CardName;
+
+            cardType = data.CardType;
+
+            characterRole = data.CharacterRole;
+      
             equipmentClass = data.EquipmentClass;
     }
 

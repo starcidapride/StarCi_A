@@ -19,7 +19,7 @@ public interface ICharacterCard : ICard
 {
     public int Experience { get; }
 
-    public CharacterRole Role { get; }    
+    public CharacterRole CharacterRole { get; }    
     public int MaxHealth { get; }
     public int AttackDamage { get; }
     public int Armor { get; }

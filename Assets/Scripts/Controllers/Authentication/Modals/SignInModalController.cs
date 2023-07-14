@@ -7,14 +7,13 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net;
 
 using static AuthApiService;
 using static ApiUtils;
 using static ImageUtils;
-using static UserDto;
 using static Constants.ButtonNames;
-using static AuthApiDto;
-using System.Net;
+
 
 public class SignInModalController : Singleton<SignInModalController>
 {
