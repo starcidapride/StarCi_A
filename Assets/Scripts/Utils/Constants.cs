@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using static Constants.Apis;
 
 public class Constants
 {
@@ -26,7 +27,21 @@ public class Constants
             public static readonly string SETUP_PROFILE_API = SERVER_URL + PROFILE + "setup-profile";
 
         }
-        
+
+        public class Deck
+        {
+            public static readonly string DECK = "api/deck/";
+
+            public static readonly string ADD_DECK = SERVER_URL + DECK + "add-deck";
+
+            public static readonly string ADD_PLAY_CARD = SERVER_URL + DECK + "add-play-card";
+
+            public static readonly string ADD_CHARACTER_CARD = SERVER_URL + DECK + "add-character-card";
+
+            public static readonly string REMOVE_PLAY_CARD = SERVER_URL + DECK + "remove-play-card";
+
+            public static readonly string REMOVE_CHARACTER_CARD = SERVER_URL + DECK + "remove-character-card";
+        }
     }
 
     public class Prefabs

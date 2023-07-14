@@ -8,6 +8,7 @@ using static ApiUtils;
 using static Constants.ButtonNames;
 using static AuthApiService;
 using static ImageUtils;
+using static UserInventory;
 
 public class BootstrapManager : Singleton<BootstrapManager>
 {
@@ -59,23 +60,8 @@ public class BootstrapManager : Singleton<BootstrapManager>
 
             inventory.Init();
 
-            Debug.Log(JsonConvert.SerializeObject(user));
-
             inventory.UpdateInventory(
-                new User()
-                {
-                    Email = user.Email,
-
-                    Username = user.Username,
-
-                    Picture = DecodeBase64Image(user.Picture),
-
-                    Bio = user.Bio,
-
-                    FirstName = user.FirstName,
-
-                    LastName = user.LastName,
-                }
+                GetUser(user)
                 );
 
             LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);

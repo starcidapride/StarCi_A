@@ -120,6 +120,14 @@
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\Modals\CreateFirstDeckModalController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\ResentButtonController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Authentication\Modals\SignUpModalController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Home\HomeUIController.cs" />
+    <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardDragToDeckController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardShowcaseDragAreaController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardWarehouseDeckCollectionController.cs" />
+    <Compile Include="Assets\Scripts\Apis\DeckApiService.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\PlayDeckController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CharacterDeckController.cs" />
+    <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardDragFromDeckController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

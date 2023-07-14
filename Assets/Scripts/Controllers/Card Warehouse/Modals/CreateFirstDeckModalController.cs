@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,9 +35,9 @@ public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalCont
             {
                 DeckName = deckName,
 
-                PlayDeck = new ComponentDeck(),
+                PlayDeck = new List<string>(),
 
-                CharacterDeck = new ComponentDeck()
+                CharacterDeck = new List<string>()
             });
 
         ModalController.Instance.CloseNearestModal();

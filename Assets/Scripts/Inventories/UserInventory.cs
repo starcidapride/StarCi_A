@@ -1,27 +1,16 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Http;
 using UnityEngine;
 
-public class DeckCollection
+using static DeckApiService;
+using static ImageUtils;
+using static Constants.Apis.Deck;
+
+public enum ComponentDeckType
 {
-    public int SelectedDeckIndex { get; set; }
-
-    public List<Deck> Decks { get; set; }
-}
-
-public class Deck
-{
-    public string DeckName { get; set; }
-
-    public ComponentDeck PlayDeck { get; set; }
-
-    public ComponentDeck CharacterDeck { get; set; }
-
-}
-
-public class ComponentDeck
-{
-    public List<string> Cards { get; set; }
+    Play,
+    Character
 }
 
 public class User
@@ -96,17 +85,22 @@ public class UserInventory : ScriptableObject
         ExecuteInventoryTrigger();
     }
 
-    public void AddDeck(Deck deck)
-    {   
-        DeckCollection ??= new DeckCollection()
+    public async void AddCard(string cardName, ComponentDeckType componentDeckType)
+    {
+  
+    }
+    public async void AddDeck(string deckName)
+    {
+        var user = await ExecuteAddDeck(
+            new AddDeckRequest()
             {
-                SelectedDeckIndex = 0,
-                Decks = new List<Deck>()
-            };
+                DeckName = deckName,
 
-        DeckCollection.Decks.Add(deck);
+            }, ClientErrorHandler
+            );
 
-        ExecuteInventoryTrigger();
+        UpdateInventoryThenNotify(GetUser(user));
+
     }
 
     public void Init()
@@ -127,6 +121,26 @@ public class UserInventory : ScriptableObject
 
     }
 
+    public static User GetUser(PresentableUser user)
+    {
+        return new User()
+        {
+            Email = user.Email,
+
+            Username = user.Username,
+
+            Picture = DecodeBase64Image(user.Picture),
+
+            Bio = user.Bio,
+
+            FirstName = user.FirstName,
+
+            LastName = user.LastName,
+
+            DeckCollection = user.DeckCollection
+        };
+    }
+
     public delegate void InventoryTriggeredEventHandler();
 
     public event InventoryTriggeredEventHandler InventoryTriggered;
@@ -134,5 +148,10 @@ public class UserInventory : ScriptableObject
     private void ExecuteInventoryTrigger()
     {
         InventoryTriggered?.Invoke();
+    }
+
+    private void ClientErrorHandler(HttpRequestException ex)
+    {
+        Debug.Log(ex);
     }
 }

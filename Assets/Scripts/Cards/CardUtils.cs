@@ -21,7 +21,7 @@ public class CardUtils
 
         var map = GetCharactersMap();
 
-        var cardClass =  map.ContainsKey(cardName) ? map[cardName] : null;
+        var cardClass = map.ContainsKey(cardName) ? map[cardName] : null;
 
         if (cardClass != null)
         {
@@ -102,7 +102,7 @@ public class CardUtils
         };
 
         var controller = card.GetComponent<EquipmentCardController>();
-        
+
         controller.RenderDisplay(attributes);
 
         return card;
@@ -122,7 +122,7 @@ public class CardUtils
 
         var card = UnityEngine.Object.Instantiate(spellCardPrefab, parent);
 
-        var cardClassObject = (ISpellCard) Activator.CreateInstance(cardClass);
+        var cardClassObject = (ISpellCard)Activator.CreateInstance(cardClass);
 
         var attributes = new SpellCardAttributes()
         {
@@ -136,7 +136,7 @@ public class CardUtils
         var controller = card.GetComponent<SpellCardController>();
 
         controller.RenderDisplay(attributes);
-        
+
         return card;
     }
 
@@ -154,10 +154,10 @@ public class CardUtils
 
         var card = UnityEngine.Object.Instantiate(otherCardPrefab, parent);
 
-        var cardClassObject = (IOtherCard) Activator.CreateInstance(cardClass);
+        var cardClassObject = (IOtherCard)Activator.CreateInstance(cardClass);
 
         var attributes = new OtherCardAttributes()
-        {   
+        {
             CardName = cardName,
 
             Frame = cardClassObject.Frame,
@@ -190,7 +190,7 @@ public class CardUtils
         };
     }
 
-    public static IEnumerator InstantiateAndSetupCardCoroutine(string cardName, Vector2 position, Vector2 scale, Transform parent = null,  Type script = null)
+    public static IEnumerator InstantiateAndSetupCardCoroutine(string cardName, Vector2 position, Vector2 scale, Transform parent = null, Type[] scripts = null)
     {
         var card = InstantiateCard(cardName, parent);
 
@@ -198,23 +198,29 @@ public class CardUtils
 
         card.transform.localScale = scale;
 
-        if (script != null && typeof(Component).IsAssignableFrom(script))
+        if (scripts != null)
         {
-            var cardEventController = card.gameObject.AddComponent(script);
-
-            if (cardEventController is CardEventController)
+            foreach (Type script in scripts)
             {
-                var cardEvent = (CardEventController) cardEventController;
-                cardEvent.CardName = cardName;
-            }
+                if (script != null && typeof(Component).IsAssignableFrom(script))
+                {
+                    var cardEventController = card.gameObject.AddComponent(script);
 
+                    if (cardEventController is CardEventController)
+                    {
+                        var cardEvent = (CardEventController)cardEventController;
+                        cardEvent.CardName = cardName;
+                    }
+                }
+            }
         }
+
 
         yield return ExecuteTriggerThenWait(card, CARD_INSTANTIATION_TRIGGER);
     }
 
-     public static  Dictionary<string, AbilityAttributes> GetAbilityAttributes(string cardName)
-      {
+    public static Dictionary<string, AbilityAttributes> GetAbilityAttributes(string cardName)
+    {
         var characterCardClassObject = GetCharacterCardObject(cardName);
 
         if (characterCardClassObject == null) return null;

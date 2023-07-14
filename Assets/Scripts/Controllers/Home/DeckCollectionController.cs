@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -43,9 +44,15 @@ public class DeckCollectionController : Singleton<DeckCollectionController>
 
     private void RenderDisplay()
     {
-        if (inventory.DeckCollection == null) return;
-
-
+        var options = new List<TMP_Dropdown.OptionData>();
+        foreach (var deck in inventory.DeckCollection.Decks)
+        {
+            options.Add(new TMP_Dropdown.OptionData()
+            {
+                text = deck.DeckName
+            });
+        }
+        selectDeckDropdownInput.options = options;
     }
 
     private void OnDestroy()

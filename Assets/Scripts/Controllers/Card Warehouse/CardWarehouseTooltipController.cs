@@ -41,9 +41,9 @@ public class CardWarehouseTooltipController : Singleton<CardWarehouseTooltipCont
         var mousePos = GetMousePos();
 
         var containerSize = ((RectTransform) container.transform).sizeDelta;
-        Debug.Log(containerSize / 2);
-        container.transform.position = mousePos + containerSize / 2;
+        var imageSize = ((RectTransform)abilityImage.transform).sizeDelta;
 
+        container.transform.position = mousePos + containerSize / 2 + imageSize / 2;
     }
     public void Hide()
     {

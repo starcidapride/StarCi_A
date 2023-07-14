@@ -7,6 +7,7 @@ using System.Text;
 
 using static Constants.Apis.Authentication;
 using static ApiUtils;
+using System.Collections.Generic;
 
 public class AuthTokenSet
 {
@@ -15,6 +16,31 @@ public class AuthTokenSet
     [JsonProperty("refreshToken")]
     public string RefreshToken { get; set; }
 }
+
+public class DeckCollection
+{
+    [JsonProperty("selectedDeckIndex")]
+    public int SelectedDeckIndex { get; set; }
+
+    [JsonProperty("decks")]
+    public List<Deck> Decks { get; set; }
+}
+
+public class Deck
+{
+    [JsonProperty("deckName")]
+
+    public string DeckName { get; set; }
+
+    [JsonProperty("playDeck")]
+    public List<string> PlayDeck { get; set; }
+
+    [JsonProperty("characterDeck")]
+    public List<string> CharacterDeck { get; set; }
+
+}
+
+
 public class PresentableUser
 {
     [JsonProperty("email")]
@@ -34,6 +60,9 @@ public class PresentableUser
 
     [JsonProperty("lastName")]
     public string LastName { get; set; }
+    
+    [JsonProperty("deckCollection")]
+    public DeckCollection DeckCollection { get; set; }
 }
 
 public class SignInRequest

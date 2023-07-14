@@ -5,6 +5,7 @@ using UnityEngine.Profiling;
 
 using static AnimatorUtils;
 
+
 public class HomeManager : Singleton<HomeManager>
 {
     [SerializeField]

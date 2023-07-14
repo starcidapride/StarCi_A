@@ -97,9 +97,9 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
 
         var cardNames = sortedMap.Select(kvp => kvp.Key).ToList();
 
-        for (int i = 12 * PresentPage; i < math.min(12 * (PresentPage + 1), cardNames.Count); i++){
+        for (int i = 12 * PresentPage; i < math.min(12 * (PresentPage + 1), cardNames.Count); i++) {
 
-            StartCoroutine(InstantiateAndSetupCardCoroutine(cardNames[i], cardPositions[i].Center, new Vector2(0.25f, 0.25f), container, typeof(CardShowcaseClickEventController)));
+            StartCoroutine(InstantiateAndSetupCardCoroutine(cardNames[i], cardPositions[i].Center, new Vector2(0.25f, 0.25f), container, new Type[] { typeof(CardShowcaseClickEventController), typeof(CardDragToDeckController) }));
         }
 
         CardWarehouseUIController.Instance.SetInteractability(false);
