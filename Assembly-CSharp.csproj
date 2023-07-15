@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Controllers\Bootstrap\LoadingController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\ModalCancelButtonController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardWarehouseDeckCollectionController.cs" />
+    <Compile Include="Assets\Scripts\Apis\DeckApiService.cs" />
     <Compile Include="Assets\Scripts\Utils\GameObjectUtils.cs" />
     <Compile Include="Assets\Scripts\Cards\CardMaps.cs" />
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardSearchBoxController.cs" />
@@ -72,14 +74,17 @@
     <Compile Include="Assets\Scripts\Managers\Card Warehouse\CardWarehouseManager.cs" />
     <Compile Include="Assets\Scripts\Managers\Bootstrap\LoadingSceneManager.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Characters\ICharacterCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardDragFromDeckController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Authentication\MainMenuController.cs" />
     <Compile Include="Assets\Scripts\Apis\AuthApiService.cs" />
     <Compile Include="Assets\Scripts\Inventories\UserInventory.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\CharacterCardController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Others\IOtherCard.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\PlayDeckController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Bootstrap\ModalController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardShowcaseController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Home\Modals\SetupProfileModalController.cs" />
+    <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardDragToDeckController.cs" />
     <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
     <Compile Include="Assets\Scripts\Utils\EnumUtils.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Spells\Cleanse.cs" />
@@ -87,6 +92,7 @@
     <Compile Include="Assets\Scripts\Utils\GridUtils.cs" />
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardPreviewPanelController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Equipments\IEquipmentCard.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Home\HomeUIController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Equipments\ShieldOfTheLost.cs" />
     <Compile Include="Assets\Scripts\Controllers\Authentication\Modals\SignInModalController.cs" />
     <Compile Include="Assets\Scripts\Managers\Bootstrap\BootstrapManager.cs" />
@@ -100,6 +106,7 @@
     <Compile Include="Assets\Scripts\Cards\Collection\Characters\Baldum.cs" />
     <Compile Include="Assets\Scripts\Utils\AuthenticationUtils.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\QuitButtonController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CharacterDeckController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\AlertCancelButtonController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Equipments\FafnirsTalon.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\Events\CardEventController.cs" />
@@ -112,6 +119,7 @@
     <Compile Include="Assets\Scripts\Inventories\CardSearchBoxInventory.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\SpellCardController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Home\DeckCollectionController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardShowcaseDragAreaController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Characters\TelAnnas.cs" />
     <Compile Include="Assets\Scripts\Cards\CardUtils.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\EquipmentCardController.cs" />
@@ -120,14 +128,6 @@
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\Modals\CreateFirstDeckModalController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\ResentButtonController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Authentication\Modals\SignUpModalController.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Home\HomeUIController.cs" />
-    <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardDragToDeckController.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardShowcaseDragAreaController.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardWarehouseDeckCollectionController.cs" />
-    <Compile Include="Assets\Scripts\Apis\DeckApiService.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\PlayDeckController.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CharacterDeckController.cs" />
-    <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardDragFromDeckController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

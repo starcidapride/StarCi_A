@@ -21,9 +21,17 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
     [SerializeField]
     private Button deleteDeckButton;
 
+    [SerializeField]
+    private Button saveDeckButton;
+
+    [SerializeField]
+    private Button defaultDeckButton;
+
     private void Start()
     {
         RenderDisplay();
+
+        selectDeckDropdownInput.value = inventory.DeckCollection.SelectedDeckIndex;
 
         selectDeckDropdownInput.onValueChanged.AddListener(OnSelectDeckDropdownInputValueChanged);
 
@@ -32,6 +40,10 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
         renameDeckButton.onClick.AddListener(OnRenameDeckButtonClick);
 
         deleteDeckButton.onClick.AddListener(OnDeleteDeckButtonClick);
+
+        saveDeckButton.onClick.AddListener(OnSaveDeckButtonClick);
+
+        defaultDeckButton.onClick.AddListener(OnDefaultDeckButtonClick);
     }
 
     public void RenderDisplay()
@@ -51,7 +63,7 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
 
     private void OnSelectDeckDropdownInputValueChanged(int value)
     {
-
+        inventory.AlterSelectedDeckThenNotify(value);
     }
 
     private void OnCreateDeckButtonClick()
@@ -67,5 +79,15 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
     private void OnDeleteDeckButtonClick()
     {
 
+    }
+
+    private void OnSaveDeckButtonClick()
+    {
+        inventory.Save();
+    }
+
+    private void OnDefaultDeckButtonClick()
+    {
+        inventory.Default();
     }
 }

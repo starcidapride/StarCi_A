@@ -33,15 +33,8 @@ public class CreateNewDeckModalController : Singleton<CreateNewDeckModalControll
     {
         inventory.DeckCollection.SelectedDeckIndex = inventory.DeckCollection.Decks.Count;
 
-        inventory.AddDeck(
-            new Deck()
-            {
-                DeckName = deckName,
-
-                PlayDeck = new List<string>(),
-
-                CharacterDeck = new List<string>()
-            });
+        inventory.AddDeck(deckName);
+            
 
         ModalController.Instance.CloseNearestModal();
     }

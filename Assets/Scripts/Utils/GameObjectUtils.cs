@@ -72,4 +72,11 @@ public class GameObjectUtils
             canvasGroup.interactable = state;
             canvasGroup.blocksRaycasts = state;
     }
+
+    public static void SetVisibility(Transform transform, bool state = true)
+    {
+        var canvasGroup = transform.GetComponent<CanvasGroup>();
+
+        canvasGroup.alpha = state ? 1 : 0;
+    }
 }

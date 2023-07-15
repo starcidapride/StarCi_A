@@ -22,8 +22,6 @@ public class CardDragToDeckController : CardEventController, IBeginDragHandler, 
         var mousePos = GetMousePos();
       
         dragCard.position = mousePos - localPosition;
-
-        Debug.Log(localPosition);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -32,16 +30,14 @@ public class CardDragToDeckController : CardEventController, IBeginDragHandler, 
 
         if (IsPositionInsideRectTransformArea(cardPosition, (RectTransform) PlayDeckController.Instance.GetTransform()))
         {
-
+            PlayDeckController.Instance.AddCard(CardName);
         } 
         else if (IsPositionInsideRectTransformArea(cardPosition, (RectTransform) CharacterDeckController.Instance.GetTransform()))
         {
-
+            CharacterDeckController.Instance.AddCard(CardName);
         }
 
         Destroy(dragCard.gameObject);
-
-
     }
 }
 

@@ -34,13 +34,13 @@ public class Constants
 
             public static readonly string ADD_DECK = SERVER_URL + DECK + "add-deck";
 
-            public static readonly string ADD_PLAY_CARD = SERVER_URL + DECK + "add-play-card";
+            public static readonly string SAVE_DECK = SERVER_URL + DECK + "save-deck";
 
-            public static readonly string ADD_CHARACTER_CARD = SERVER_URL + DECK + "add-character-card";
+            public static readonly string DEFAULT_DECK = SERVER_URL + DECK + "default-deck";
 
-            public static readonly string REMOVE_PLAY_CARD = SERVER_URL + DECK + "remove-play-card";
+            public static readonly string RENAME_DECK = SERVER_URL + DECK + "rename-deck";
 
-            public static readonly string REMOVE_CHARACTER_CARD = SERVER_URL + DECK + "remove-character-card";
+            public static readonly string DELETE_DECK = SERVER_URL + DECK + "delete-deck";
         }
     }
 
@@ -193,6 +193,19 @@ public class Constants
 
         public static readonly string R = "R";
 
+    }
+
+    public class DeckLimits 
+    {
+        public static int MAX_PLAY_CARDS = 40;
+
+        public static int MAX_CHARACTER_CARDS = 10;
+
+        public static int MAX_PLAY_OCCURRENCES = 3;
+
+        public static int MAX_INVOCATION_OCCURRENCES = 6;
+
+        public static int MAX_CHARACTER_OCCURRENCES = 1;
     }
 
 }

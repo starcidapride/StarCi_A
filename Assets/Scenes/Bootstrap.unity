@@ -1592,6 +1592,7 @@ GameObject:
   - component: {fileID: 7253209382213281400}
   - component: {fileID: 7253209382213281405}
   - component: {fileID: 7253209382213281408}
+  - component: {fileID: 7253209382213281409}
   m_Layer: 5
   m_Name: Message Box
   m_TagString: Untagged
@@ -1684,6 +1685,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!225 &7253209382213281409
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253209382213281402}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &7253209382869281193
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -30,15 +30,7 @@ public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalCont
 
     private void OnSubmitButtonClick()
     {
-        inventory.AddDeck(
-            new Deck()
-            {
-                DeckName = deckName,
-
-                PlayDeck = new List<string>(),
-
-                CharacterDeck = new List<string>()
-            });
+        inventory.AddDeck(deckName);
 
         ModalController.Instance.CloseNearestModal();
 

@@ -19,11 +19,6 @@ public class CardWarehouseManager : Singleton<CardWarehouseManager>
 
     private void Start()
     {
-        /*if (inventory.DeckCollection == null)
-        {
-            ModalController.Instance.InstantiateModal(createFirstDeckModal);
-            return;
-        }*/
     }
 
     public void DisplayUI()

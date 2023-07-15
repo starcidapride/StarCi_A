@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 using static CardMaps;
 
@@ -10,6 +11,25 @@ using static AnimatorUtils;
 using static Constants.Prefabs.Cards;
 using static Constants.Triggers.Card;
 using static Constants.AbilityNames;
+using static Constants.DeckLimits;
+using static Constants.CardNames.Others;
+
+
+public enum ComponentDeckType
+{
+    Play,
+    Character
+}
+
+public enum CardAdditionResult
+{
+    Success,
+    CardNotAllowed,
+    DeckReachedLimit,
+    MaxCardOccurrences,
+}
+
+
 
 public class CardUtils
 {
@@ -190,7 +210,7 @@ public class CardUtils
         };
     }
 
-    public static IEnumerator InstantiateAndSetupCardCoroutine(string cardName, Vector2 position, Vector2 scale, Transform parent = null, Type[] scripts = null)
+    public static Transform InstantiateAndSetupCard(string cardName, Vector2 position, Vector2 scale, Transform parent = null, List<Type> scripts = null)
     {
         var card = InstantiateCard(cardName, parent);
 
@@ -214,7 +234,14 @@ public class CardUtils
                 }
             }
         }
+        
+        return card;
+    }
 
+
+    public static IEnumerator InstantiateAndSetupCardCoroutine(string cardName, Vector2 position, Vector2 scale, Transform parent = null, List<Type> scripts = null)
+    {
+        var card = InstantiateAndSetupCard(cardName, position, scale, parent, scripts);
 
         yield return ExecuteTriggerThenWait(card, CARD_INSTANTIATION_TRIGGER);
     }
@@ -248,6 +275,27 @@ public class CardUtils
                 AbilityDescription = characterCardClassObject.RDescription
             }},
         };
+    }
+
+    public static CardAdditionResult ValidateCardAddition(ComponentDeckType deckType, Deck deck, string cardName)
+    {
+        var maxCards = deckType == ComponentDeckType.Play ? MAX_PLAY_CARDS : MAX_CHARACTER_CARDS;
+        var maxOccurrences = deckType == ComponentDeckType.Play ? MAX_PLAY_OCCURRENCES : MAX_CHARACTER_OCCURRENCES;
+        var componentDeck = deckType == ComponentDeckType.Play ? deck.PlayDeck : deck.CharacterDeck;
+
+        var map = GetMap();
+
+        if (! (map[cardName].Item1 == CardType.Character ^ deckType == ComponentDeckType.Play))
+            return CardAdditionResult.CardNotAllowed;
+
+        if (componentDeck.Count >= maxCards) return CardAdditionResult.DeckReachedLimit;
+
+        var cardOccurrences = componentDeck.Count(_cardName => _cardName == cardName);
+
+        if (cardOccurrences >= (cardName == INVOCATION ? MAX_INVOCATION_OCCURRENCES : maxOccurrences))
+            return CardAdditionResult.MaxCardOccurrences;
+        
+        return CardAdditionResult.Success;
     }
 
 }

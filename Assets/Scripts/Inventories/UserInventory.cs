@@ -5,13 +5,8 @@ using UnityEngine;
 
 using static DeckApiService;
 using static ImageUtils;
-using static Constants.Apis.Deck;
-
-public enum ComponentDeckType
-{
-    Play,
-    Character
-}
+using static Constants.ButtonNames;
+using static CardUtils;
 
 public class User
 {
@@ -84,11 +79,89 @@ public class UserInventory : ScriptableObject
 
         ExecuteInventoryTrigger();
     }
-
-    public async void AddCard(string cardName, ComponentDeckType componentDeckType)
+    public async void Save()
     {
-  
+        var deck = DeckCollection.Decks[DeckCollection.SelectedDeckIndex];
+        await ExecuteSaveDeck(
+            new SaveDeckRequest()
+            {
+                DeckName = deck.DeckName,
+                PlayCardNames = deck.PlayDeck,
+                CharacterCardNames = deck.CharacterDeck,
+            }, ClientErrorHandler
+        );
+
+        AlertController.Instance.Show(
+            AlertCaption.Success, 
+            "Save deck complete.",
+            new List<AlertButton>()
+            {
+                new AlertButton()
+                {
+                    ButtonText = CANCEL,
+                    Script = typeof(AlertCancelButtonController)
+                }
+            });
     }
+
+    public void AlterSelectedDeckThenNotify(int index)
+    {
+        if (DeckCollection.SelectedDeckIndex != index)
+        {
+            DeckCollection.SelectedDeckIndex = index;
+
+            ExecuteInventoryTrigger();
+        }
+    }
+
+    public async void Default()
+    {
+        await ExecuteDefaultDeck(
+            new DefaultDeckRequest()
+            {
+                DefaultDeckIndex = DeckCollection.SelectedDeckIndex
+            }, ClientErrorHandler
+        );
+
+        string deckName = DeckCollection.Decks[DeckCollection.SelectedDeckIndex].DeckName;
+        string message = $"Deck '{deckName}' has been saved as the default deck.";
+
+        AlertController.Instance.Show(
+            AlertCaption.Success,
+            message,
+            new List<AlertButton>()
+            {
+        new AlertButton()
+        {
+            ButtonText = CANCEL,
+            Script = typeof(AlertCancelButtonController)
+        }
+            }
+        );
+    }
+
+    public void AddCard(string cardName, ComponentDeckType componentDeckType)
+    {
+        var deck = DeckCollection.Decks[DeckCollection.SelectedDeckIndex];
+
+        var componentDeck = componentDeckType == ComponentDeckType.Play ? deck.PlayDeck : deck.CharacterDeck;
+
+        var additionResult = ValidateCardAddition(componentDeckType, deck, cardName);
+
+        if (additionResult == CardAdditionResult.Success) componentDeck.Add(cardName);
+    }
+
+    public void RemoveCard(string cardName, ComponentDeckType componentDeckType)
+    {
+        var deck = DeckCollection.Decks[DeckCollection.SelectedDeckIndex];
+
+        var componentDeck = componentDeckType == ComponentDeckType.Play ? deck.PlayDeck : deck.CharacterDeck;
+
+        if (!componentDeck.Contains(cardName)) return;
+
+        componentDeck.Remove(cardName);
+    }
+
     public async void AddDeck(string deckName)
     {
         var user = await ExecuteAddDeck(
