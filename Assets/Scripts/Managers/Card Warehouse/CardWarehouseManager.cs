@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 using static AnimatorUtils;
+using static Constants.Triggers.Modal;
 
 public class CardWarehouseManager : Singleton<CardWarehouseManager>
 {
@@ -19,6 +20,13 @@ public class CardWarehouseManager : Singleton<CardWarehouseManager>
 
     private void Start()
     {
+        if (inventory.DeckCollection.Decks.Count == 0)
+        {
+            ModalController.Instance.InstantiateModal(createFirstDeckModal);
+            return;
+        }
+
+        DisplayUI();
     }
 
     public void DisplayUI()

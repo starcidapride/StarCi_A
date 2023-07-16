@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeckCollectionController>
 {
     [SerializeField]
-    private UserInventory inventory;
+    private Transform createNewDeckModal;
 
     [SerializeField]
-    private TMP_Dropdown selectDeckDropdownInput;
+    private UserInventory inventory;
 
     [SerializeField]
     private Button createDeckButton;
@@ -29,12 +29,6 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
 
     private void Start()
     {
-        RenderDisplay();
-
-        selectDeckDropdownInput.value = inventory.DeckCollection.SelectedDeckIndex;
-
-        selectDeckDropdownInput.onValueChanged.AddListener(OnSelectDeckDropdownInputValueChanged);
-
         createDeckButton.onClick.AddListener(OnCreateDeckButtonClick);
 
         renameDeckButton.onClick.AddListener(OnRenameDeckButtonClick);
@@ -46,39 +40,17 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
         defaultDeckButton.onClick.AddListener(OnDefaultDeckButtonClick);
     }
 
-    public void RenderDisplay()
-    {
-        var options = new List<TMP_Dropdown.OptionData>();
-
-            foreach (var deck in inventory.DeckCollection.Decks)
-            {
-                options.Add(new TMP_Dropdown.OptionData()
-                {
-                    text = deck.DeckName
-                });
-            }
-            selectDeckDropdownInput.options = options;
-        
-    }
-
-    private void OnSelectDeckDropdownInputValueChanged(int value)
-    {
-        inventory.AlterSelectedDeckThenNotify(value);
-    }
-
     private void OnCreateDeckButtonClick()
     {
-
+        ModalController.Instance.InstantiateModal(createNewDeckModal);
     }
 
     private void OnRenameDeckButtonClick()
     {
-
     }
 
     private void OnDeleteDeckButtonClick()
-    {
-
+    { 
     }
 
     private void OnSaveDeckButtonClick()

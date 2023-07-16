@@ -102,11 +102,11 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
             StartCoroutine(InstantiateAndSetupCardCoroutine(cardNames[i], cardPositions[i].Center, new Vector2(0.25f, 0.25f), container, new List<Type> { typeof(CardShowcaseClickEventController), typeof(CardDragToDeckController) }));
         }
 
-        CardWarehouseUIController.Instance.SetInteractability(false);
+        UIController.Instance.SetInteractability(false);
 
         yield return new WaitForSeconds(0.6f);
 
-        CardWarehouseUIController.Instance.SetInteractability();
+        UIController.Instance.SetInteractability();
     }
 
     private void OnDestroy()

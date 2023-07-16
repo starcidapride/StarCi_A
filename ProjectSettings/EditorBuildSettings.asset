@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Card Warehouse.unity
     guid: e507e82604bfb7248a34a21bc6e1fb30
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: 8b94d5e7404ccc044bb40026bdc946af
+  - enabled: 1
+    path: Assets/Scenes/Waiting Room.unity
+    guid: a735249f8367a56479cfa9860d593a01
   m_configObjects: {}

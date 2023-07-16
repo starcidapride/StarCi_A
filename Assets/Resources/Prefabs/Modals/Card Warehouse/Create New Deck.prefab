@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: e3912c8cd34fa8f48bec1b1aca58a4dd, type: 2}
-  deckNameTextInput: {fileID: 0}
+  deckNameTextInput: {fileID: 6493071776427220989}
   submitButton: {fileID: 6239430537792931942}
 --- !u!1001 &3568575313049395629
 PrefabInstance:
@@ -183,9 +183,13 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u200B"
       objectReference: {fileID: 0}
+    - target: {fileID: 7753551728709821869, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4804173366912613591, guid: fcce95528c0f3da4385ebe22fa513a11, type: 2}
     - target: {fileID: 7753551730155372110, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
       propertyPath: m_Name
-      value: Text Input 3
+      value: Deck Name Text Input
       objectReference: {fileID: 0}
     - target: {fileID: 7753551730155372112, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
       propertyPath: m_Text
@@ -282,6 +286,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7753551730155372113, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
   m_PrefabInstance: {fileID: 3568575313049395629}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6493071776427220989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7753551730155372112, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
+  m_PrefabInstance: {fileID: 3568575313049395629}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4225476157434981391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -293,6 +308,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Submit
       objectReference: {fileID: 0}
+    - target: {fileID: 7797139605814270971, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4804173366912613591, guid: fcce95528c0f3da4385ebe22fa513a11, type: 2}
     - target: {fileID: 7797139607062324328, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -502,6 +521,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Create New Deck
       objectReference: {fileID: 0}
+    - target: {fileID: 7708790325575788111, guid: 74ecd630de549e946838eba1edba36bb, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4804173366912613591, guid: fcce95528c0f3da4385ebe22fa513a11, type: 2}
     - target: {fileID: 7708790325575788113, guid: 74ecd630de549e946838eba1edba36bb, type: 3}
       propertyPath: m_Name
       value: Label

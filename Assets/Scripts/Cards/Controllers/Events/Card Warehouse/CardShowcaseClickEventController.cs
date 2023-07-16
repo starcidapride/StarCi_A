@@ -19,9 +19,9 @@ public class CardShowcaseClickEventController : CardEventController, IPointerCli
     {
         DestroyAllChildGameObjects(CardPreviewPanelController.Instance.GetTransform());
 
-        CardWarehouseUIController.Instance.SetInteractability(false);
+        UIController.Instance.SetInteractability(false);
         yield return InstantiateAndSetupCardCoroutine(CardName, Vector2.zero, Vector2.one * 3/4, CardPreviewPanelController.Instance.GetTransform(), new List<Type> { typeof(CardPreviewPanelHoverEventController) });
-        CardWarehouseUIController.Instance.SetInteractability();
+        UIController.Instance.SetInteractability();
     }
 
 

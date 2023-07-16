@@ -208,4 +208,16 @@ public class Constants
         public static int MAX_CHARACTER_OCCURRENCES = 1;
     }
 
+    public class LobbyService
+    {
+        public static readonly string RELAY_CODE = "relayCode";
+
+        public static readonly string HOST = "host";
+
+        public static readonly string USERNAME = "username";
+
+        public static readonly string DESCRIPTION = "description";
+
+        public static readonly string RELAY_ALLOCATION_ID = "relayAllocationId";
+    }
 }

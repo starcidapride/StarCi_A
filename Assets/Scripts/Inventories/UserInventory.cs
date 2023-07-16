@@ -7,7 +7,13 @@ using static DeckApiService;
 using static ImageUtils;
 using static Constants.ButtonNames;
 using static CardUtils;
+using System.Net;
 
+public class AddDeckResponseError
+{
+    [JsonProperty("deckNameError")]
+    public string DeckNameError { get; set; }
+}
 public class User
 {
     public string Email { get; set; }
@@ -124,11 +130,10 @@ public class UserInventory : ScriptableObject
         );
 
         string deckName = DeckCollection.Decks[DeckCollection.SelectedDeckIndex].DeckName;
-        string message = $"Deck '{deckName}' has been saved as the default deck.";
 
         AlertController.Instance.Show(
             AlertCaption.Success,
-            message,
+            $"Deck '{deckName}' has been saved as the default deck.",
             new List<AlertButton>()
             {
         new AlertButton()
@@ -162,6 +167,21 @@ public class UserInventory : ScriptableObject
         componentDeck.Remove(cardName);
     }
 
+    private void FailedExecuteAddDeckResponseHandler(string response, HttpStatusCode code)
+    {
+        var responseObject = JsonConvert.DeserializeObject<AddDeckResponseError>(response);
+        AlertController.Instance.Show(
+           AlertCaption.Error,
+           responseObject.DeckNameError,
+           new List<AlertButton>()
+           {
+        new AlertButton()
+        {
+            ButtonText = CANCEL,
+            Script = typeof(AlertCancelButtonController)
+        }
+           });
+    }
     public async void AddDeck(string deckName)
     {
         var user = await ExecuteAddDeck(
@@ -169,11 +189,25 @@ public class UserInventory : ScriptableObject
             {
                 DeckName = deckName,
 
-            }, ClientErrorHandler
+            }, FailedExecuteAddDeckResponseHandler, ClientErrorHandler
             );
+
+        if (user == null) return;
 
         UpdateInventoryThenNotify(GetUser(user));
 
+        AlertController.Instance.Show(
+           AlertCaption.Success,
+           $"Deck '{deckName}' has been created.",
+           new List<AlertButton>()
+           {
+        new AlertButton()
+        {
+            ButtonText = CANCEL,
+            Script = typeof(AlertCancelButtonController)
+        }
+           }
+       );
     }
 
     public void Init()

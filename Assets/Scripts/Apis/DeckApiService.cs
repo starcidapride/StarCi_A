@@ -38,7 +38,7 @@ public class DefaultDeckRequest
 
 public class DeckApiService
 {
-    public static async Task<PresentableUser> ExecuteAddDeck(AddDeckRequest request, ClientErrorHandler clientErrorHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
+    public static async Task<PresentableUser> ExecuteAddDeck(AddDeckRequest request, FailedResponseHandler failedResponseHandler, ClientErrorHandler clientErrorHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
 
@@ -66,8 +66,15 @@ public class DeckApiService
                     return null;
                 }
 
-                return await ExecuteAddDeck(request, clientErrorHandler);
+                return await ExecuteAddDeck(request, failedResponseHandler, clientErrorHandler);
             }
+            else if (!response.IsSuccessStatusCode)
+            {
+                failedResponseHandler?.Invoke(data, response.StatusCode);
+
+                return null;
+            }
+
             else
             {
                 return JsonConvert.DeserializeObject<PresentableUser>(data);
