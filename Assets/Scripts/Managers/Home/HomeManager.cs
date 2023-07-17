@@ -1,16 +1,11 @@
 ﻿
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Profiling;
-
 using static AnimatorUtils;
 
 
 public class HomeManager : Singleton<HomeManager>
 {
-    [SerializeField]
-    private UserInventory userInventory;
-
     [SerializeField]
     private Transform setupProfileModal;
 
@@ -19,7 +14,8 @@ public class HomeManager : Singleton<HomeManager>
 
     private void Start()
     {
-        if (string.IsNullOrEmpty(userInventory.Username))
+        if (string.IsNullOrEmpty(UserManager.Instance.Username
+         ))
         {
             ModalController.Instance.InstantiateModal(setupProfileModal);
             return;

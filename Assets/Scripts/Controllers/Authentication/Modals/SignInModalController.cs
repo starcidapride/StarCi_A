@@ -18,9 +18,6 @@ using static Constants.ButtonNames;
 public class SignInModalController : Singleton<SignInModalController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private TMP_InputField emailTextInput;
 
     [SerializeField]
@@ -87,7 +84,7 @@ public class SignInModalController : Singleton<SignInModalController>
                 Email = email,
                 Password = password
             }, ClientErrorHandler, 
-            FailedResponseHandler
+            SignInFailedResponseHandler
 
         );
 
@@ -97,7 +94,6 @@ public class SignInModalController : Singleton<SignInModalController>
 
         if (response == null) yield break;
 
-        Debug.Log(response.AuthTokenSet.AccessToken);
         SaveAuthenticationTokens(response.AuthTokenSet.AccessToken, response.AuthTokenSet.RefreshToken);
 
         var presentableUser = response.PresentableUser;
@@ -117,7 +113,7 @@ public class SignInModalController : Singleton<SignInModalController>
             LastName = presentableUser.LastName,
         };
 
-        inventory.UpdateInventory(user);
+        UserManager.Instance.UpdateUser(user);
 
         AlertController.Instance.Show(AlertCaption.Success, "Sign in was successful. You will now be redirected to the home page.");
 
@@ -129,21 +125,10 @@ public class SignInModalController : Singleton<SignInModalController>
 
         LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);
     }
-
-    public class FailedResponse
+  
+    private void SignInFailedResponseHandler(string response, HttpStatusCode code)
     {
-        [JsonProperty("statusCode")]
-        public int StatusCode { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
-
-        [JsonProperty("error")]
-        public string Error { get; set; }
-    }
-    private void FailedResponseHandler(string response, HttpStatusCode code)
-    {
-        var failedResponse = JsonConvert.DeserializeObject<FailedResponse>(response);
+        var failedResponse = JsonConvert.DeserializeObject<SignInFailedResponse>(response);
 
         var cancelButton = new AlertButton()
         {
@@ -161,5 +146,17 @@ public class SignInModalController : Singleton<SignInModalController>
     {
         Debug.Log(ex);
     }
+}
+
+public class SignInFailedResponse
+{
+    [JsonProperty("statusCode")]
+    public int StatusCode { get; set; }
+
+    [JsonProperty("message")]
+    public string Message { get; set; }
+
+    [JsonProperty("error")]
+    public string Error { get; set; }
 }
 

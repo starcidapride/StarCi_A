@@ -15,8 +15,8 @@ public enum SceneName : byte
     [Description("Authentication")]
     Authentication,
 
-    [Description("Lobby")]
-    Lobby,
+    [Description("Lobby Room")]
+    LobbyRoom,
 
     [Description("Card Warehouse")]
     CardWarehouse,
@@ -44,7 +44,7 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
         switch (sceneName)
         {
-            case SceneName.Lobby:
+            case SceneName.LobbyRoom:
 
                 return;
 

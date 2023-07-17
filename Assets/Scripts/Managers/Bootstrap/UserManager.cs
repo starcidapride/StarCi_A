@@ -1,54 +1,40 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net;
 using UnityEngine;
 
 using static DeckApiService;
 using static ImageUtils;
 using static Constants.ButtonNames;
 using static CardUtils;
-using System.Net;
 
-public class AddDeckResponseError
-{
-    [JsonProperty("deckNameError")]
-    public string DeckNameError { get; set; }
-}
-public class User
+
+public class UserManager : SingletonPersistent<UserManager> 
 {
     public string Email { get; set; }
-
     public string Username { get; set; }
-
     public Texture2D Picture { get; set; }
-
     public string Bio { get; set; }
-
     public string FirstName { get; set; }
-
     public string LastName { get; set; }
-
-    public DeckCollection DeckCollection { get; set; }
-}
-
-[CreateAssetMenu(fileName = "User", menuName = "Inventories/User")]
-public class UserInventory : ScriptableObject
-{
-    public string Email { get; set; }
-
-    public string Username { get; set; }
-
-    public Texture2D Picture { get; set; }
-
-    public string Bio { get; set; }
-
-    public string FirstName { get; set; }
-
-    public string LastName { get; set; }
-
     public DeckCollection DeckCollection { get; set; }
 
-    public void UpdateInventory(User user)
+    public void UpdateUser(PresentableUser user)
+    {
+        var _user = GetUser(user);
+
+        UpdateUser(_user);
+    }
+
+    public void UpdateUserThenNotify(PresentableUser user)
+    {
+        UpdateUser(user);
+
+        ExecuteNotify();
+    }
+
+    public void UpdateUser(User user)
     {
         if (user.Email != null)
             Email = user.Email;
@@ -72,18 +58,18 @@ public class UserInventory : ScriptableObject
             DeckCollection = user.DeckCollection;
     }
 
-    public void UpdateInventoryThenNotify(User user)
+    public void UpdateUserThenNotify(User user)
     {
-        UpdateInventory(user);
+        UpdateUser(user);
 
-        ExecuteInventoryTrigger();
+        ExecuteNotify();
     }
-    
+
     public void UpdateSelectedDeckIndex(int index)
     {
         DeckCollection.SelectedDeckIndex = index;
 
-        ExecuteInventoryTrigger();
+        ExecuteNotify();
     }
     public async void Save()
     {
@@ -98,7 +84,7 @@ public class UserInventory : ScriptableObject
         );
 
         AlertController.Instance.Show(
-            AlertCaption.Success, 
+            AlertCaption.Success,
             "Save deck complete.",
             new List<AlertButton>()
             {
@@ -116,7 +102,7 @@ public class UserInventory : ScriptableObject
         {
             DeckCollection.SelectedDeckIndex = index;
 
-            ExecuteInventoryTrigger();
+            ExecuteNotify();
         }
     }
 
@@ -194,7 +180,7 @@ public class UserInventory : ScriptableObject
 
         if (user == null) return;
 
-        UpdateInventoryThenNotify(GetUser(user));
+        UpdateUserThenNotify(GetUser(user));
 
         AlertController.Instance.Show(
            AlertCaption.Success,
@@ -209,26 +195,7 @@ public class UserInventory : ScriptableObject
            }
        );
     }
-
-    public void Init()
-    {
-        Email = string.Empty;
-
-        Username = string.Empty;
-
-        Picture = null;
-
-        Bio = string.Empty;
-
-        FirstName = string.Empty;
-
-        LastName = string.Empty;
-
-        DeckCollection = null;
-
-    }
-
-    public static User GetUser(PresentableUser user)
+    private User GetUser(PresentableUser user)
     {
         return new User()
         {
@@ -248,17 +215,40 @@ public class UserInventory : ScriptableObject
         };
     }
 
-    public delegate void InventoryTriggeredEventHandler();
+    public delegate void NotifyEventHandler();
 
-    public event InventoryTriggeredEventHandler InventoryTriggered;
+    public event NotifyEventHandler Notify;
 
-    private void ExecuteInventoryTrigger()
+    private void ExecuteNotify()
     {
-        InventoryTriggered?.Invoke();
+        Notify?.Invoke();
     }
 
     private void ClientErrorHandler(HttpRequestException ex)
     {
         Debug.Log(ex);
     }
+}
+
+public class AddDeckResponseError
+{
+    [JsonProperty("deckNameError")]
+    public string DeckNameError { get; set; }
+}
+
+public class User
+{
+    public string Email { get; set; }
+
+    public string Username { get; set; }
+
+    public Texture2D Picture { get; set; }
+
+    public string Bio { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public DeckCollection DeckCollection { get; set; }
 }

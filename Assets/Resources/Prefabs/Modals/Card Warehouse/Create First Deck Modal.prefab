@@ -146,7 +146,7 @@ Animator:
   m_GameObject: {fileID: 6239430537940272895}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d414ba70443773a448f0e58cfbd1a277, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7e3486e48b5ef7f4984d4d2b49ddc049, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -183,6 +183,10 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u200B"
       objectReference: {fileID: 0}
+    - target: {fileID: 7753551728709821869, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4804173366912613591, guid: fcce95528c0f3da4385ebe22fa513a11, type: 2}
     - target: {fileID: 7753551730155372110, guid: 1cb8f6526dd12884cbf609626584de61, type: 3}
       propertyPath: m_Name
       value: Deck Name Text Input
@@ -304,6 +308,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Submit
       objectReference: {fileID: 0}
+    - target: {fileID: 7797139605814270971, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4804173366912613591, guid: fcce95528c0f3da4385ebe22fa513a11, type: 2}
     - target: {fileID: 7797139607062324328, guid: 2ad68fb0788d5914f9f77578aefb6fc9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -513,6 +521,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Create First Deck
       objectReference: {fileID: 0}
+    - target: {fileID: 7708790325575788111, guid: 74ecd630de549e946838eba1edba36bb, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4804173366912613591, guid: fcce95528c0f3da4385ebe22fa513a11, type: 2}
     - target: {fileID: 7708790325575788113, guid: 74ecd630de549e946838eba1edba36bb, type: 3}
       propertyPath: m_Name
       value: Label

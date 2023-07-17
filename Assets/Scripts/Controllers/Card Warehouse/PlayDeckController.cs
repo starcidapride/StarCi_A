@@ -14,9 +14,6 @@ using static GameObjectUtils;
 public class PlayDeckController : Singleton<PlayDeckController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private Transform container;
 
     private IEnumerator Start()
@@ -25,18 +22,20 @@ public class PlayDeckController : Singleton<PlayDeckController>
         
         RenderDisplay(true);
 
-        inventory.InventoryTriggered += OnInventoryTriggered;
+        UserManager.Instance.Notify += OnNotify;
     }
 
-    private void OnInventoryTriggered()
+    private void OnNotify()
     {
         RenderDisplay(true);
     }
 
     public void AddCard(string cardName)
     {
+        var deckCollection = UserManager.Instance.DeckCollection;
+
         var result = ValidateCardAddition(ComponentDeckType.Play,
-            inventory.DeckCollection.Decks[inventory.DeckCollection.SelectedDeckIndex],
+            deckCollection.Decks[deckCollection.SelectedDeckIndex],
             cardName
             );
 
@@ -52,7 +51,7 @@ public class PlayDeckController : Singleton<PlayDeckController>
         switch (result)
         {
             case CardAdditionResult.Success:
-                inventory.AddCard(cardName, ComponentDeckType.Play);
+                UserManager.Instance.AddCard(cardName, ComponentDeckType.Play);
 
                 RenderDisplay();
                 break;
@@ -73,7 +72,7 @@ public class PlayDeckController : Singleton<PlayDeckController>
 
     public void RemoveCard(string cardName)
     {
-        inventory.RemoveCard(cardName, ComponentDeckType.Play);
+        UserManager.Instance.RemoveCard(cardName, ComponentDeckType.Play);
 
         RenderDisplay(true);
     }
@@ -93,8 +92,11 @@ public class PlayDeckController : Singleton<PlayDeckController>
     {
         DestroyAllChildGameObjects(container);
 
+        var deckCollection = UserManager.Instance.DeckCollection;
+
         var grids = SplitSpriteIntoIndexedGrids(transform, 4, 10);
-        var selectedPlayDeck = inventory.DeckCollection.Decks[inventory.DeckCollection.SelectedDeckIndex].PlayDeck;
+        var selectedPlayDeck = deckCollection.Decks[deckCollection.SelectedDeckIndex].PlayDeck;
+        
         if (selectedPlayDeck.Count == 0) yield break;
 
         var isAnimations = new Dictionary<int, bool>
@@ -136,6 +138,6 @@ public class PlayDeckController : Singleton<PlayDeckController>
     }
     public void OnDestroy()
     {
-        inventory.InventoryTriggered -= OnInventoryTriggered;
+        UserManager.Instance.Notify -= OnNotify;
     }
 }

@@ -5,9 +5,6 @@ using UnityEngine;
 public class SelectDeckController: Singleton<SelectDeckController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private TMP_Dropdown selectDeckDropdownInput;
 
     private void Start()
@@ -16,10 +13,10 @@ public class SelectDeckController: Singleton<SelectDeckController>
 
         selectDeckDropdownInput.onValueChanged.AddListener(OnSelectDeckDropdownInputValueChanged);
 
-        inventory.InventoryTriggered += OnInventoryTriggered;
+        UserManager.Instance.Notify += OnNotify;
         
     }
-    private void OnInventoryTriggered()
+    private void OnNotify()
     {
         RenderDisplay();
     }
@@ -28,7 +25,7 @@ public class SelectDeckController: Singleton<SelectDeckController>
     {
         var options = new List<TMP_Dropdown.OptionData>();
 
-        foreach (var deck in inventory.DeckCollection.Decks)
+        foreach (var deck in UserManager.Instance.DeckCollection.Decks)
         {
             options.Add(new TMP_Dropdown.OptionData()
             {
@@ -37,17 +34,17 @@ public class SelectDeckController: Singleton<SelectDeckController>
         }
         selectDeckDropdownInput.options = options;
 
-        selectDeckDropdownInput.value = inventory.DeckCollection.SelectedDeckIndex;
+        selectDeckDropdownInput.value = UserManager.Instance.DeckCollection.SelectedDeckIndex;
     }
 
     private void OnSelectDeckDropdownInputValueChanged(int value)
     {
-        inventory.AlterSelectedDeckThenNotify(value);
+        UserManager.Instance.AlterSelectedDeckThenNotify(value);
     }
 
     private void OnDestroy()
     {
-        inventory.InventoryTriggered -= OnInventoryTriggered;
+        UserManager.Instance.Notify -= OnNotify;
     }
 
 }

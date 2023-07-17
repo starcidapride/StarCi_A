@@ -10,9 +10,6 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
     private Transform createNewDeckModal;
 
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private Button createDeckButton;
 
     [SerializeField]
@@ -55,11 +52,11 @@ public class CardWarehouseDeckCollectionController : Singleton<CardWarehouseDeck
 
     private void OnSaveDeckButtonClick()
     {
-        inventory.Save();
+        UserManager.Instance.Save();
     }
 
     private void OnDefaultDeckButtonClick()
     {
-        inventory.Default();
+        UserManager.Instance.Default();
     }
 }

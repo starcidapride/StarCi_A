@@ -2,13 +2,9 @@ using System.Collections;
 using UnityEngine;
 
 using static AnimatorUtils;
-using static Constants.Triggers.Modal;
 
 public class CardWarehouseManager : Singleton<CardWarehouseManager>
 {
-    [SerializeField]
-    private UserInventory inventory;
-
     [SerializeField]
     private Transform createFirstDeckModal;
 
@@ -20,7 +16,7 @@ public class CardWarehouseManager : Singleton<CardWarehouseManager>
 
     private void Start()
     {
-        if (inventory.DeckCollection.Decks.Count == 0)
+        if (UserManager.Instance.DeckCollection.Decks.Count == 0)
         {
             ModalController.Instance.InstantiateModal(createFirstDeckModal);
             return;

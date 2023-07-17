@@ -17,9 +17,6 @@ using static Constants.Triggers.Modal.SetupProfileModal;
 public class SetupProfileModalController : Singleton<SetupProfileModalController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private TMP_InputField usernameTextInput;
 
     [SerializeField]
@@ -109,7 +106,7 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
             }, ClientErrorHandler, X
             );
 
-        inventory.UpdateInventory(
+        UserManager.Instance.UpdateUser(
             new User
             {
                     Username = username,

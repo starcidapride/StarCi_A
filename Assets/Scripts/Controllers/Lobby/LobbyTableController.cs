@@ -1,15 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 using static LobbyUtils;
 using static RelayUtils;
+using static Constants.LobbyService;
+using System.Linq;
+using Unity.VisualScripting;
+using Newtonsoft.Json;
 
-public class LobbyTableController : MonoBehaviour
+using static GameObjectUtils;
+
+public class LobbyTableController : Singleton<LobbyTableController>
 {
     [SerializeField]
     private Transform createLobbyModal;
+
+    [SerializeField]
+    private Transform joinLobbyByCodeModal;
 
     [SerializeField]
     private Button createLobbyButton;
@@ -18,13 +30,85 @@ public class LobbyTableController : MonoBehaviour
     private Button joinLobbyByCodeButton;
 
     [SerializeField]
+    private TMP_InputField searchTextInput;
+
+    [SerializeField]
+    private Button searchButton;
+
+    [SerializeField]
+    private Button refreshButton;
+
+    [SerializeField]
     private Transform tableBody;
 
-    private void Start()
-    {
+    [SerializeField]
+    private Transform tableRow;
+
+    private string searchValue;
+
+    public string SelectedLobbyId { get; set; }
+
+    private IEnumerator Start()
+    {   
+        searchValue = searchTextInput.text;
+
+        yield return new WaitForEndOfFrame();
+
+        RenderDisplay();
+
         createLobbyButton.onClick.AddListener(OnCreateLobbyButtonClick);
 
         joinLobbyByCodeButton.onClick.AddListener(OnJoinLobbyByCodeButtonClick);
+
+        searchTextInput.onEndEdit.AddListener(OnSearchInputEndEdit);
+
+        searchButton.onClick.AddListener(OnSearchButtonClick);
+
+        refreshButton.onClick.AddListener(OnRefreshButtonClick);
+    }
+
+    private async void RenderDisplay(string searchValue = null)
+    {
+        DestroyAllChildGameObjects(tableBody);
+
+        var lobbies = await GetLobbies();
+        
+        if (!string.IsNullOrEmpty(searchValue))
+        {
+           
+
+            lobbies = lobbies.Where(lobby =>
+            {
+                var lobbyNameFilter = lobby.Name.ContainsInsensitive(searchValue);
+
+                var hostFilter = lobby.Data[HOST].Value.ContainsInsensitive(searchValue);
+
+                var descriptionFilter = lobby.Data[DESCRIPTION].Value.ContainsInsensitive(searchValue);
+
+                return lobbyNameFilter || hostFilter || descriptionFilter;
+            }).ToList();
+        }
+
+        foreach (var lobby in lobbies)
+        {
+            var tableRowObject = Instantiate(tableRow, tableBody);
+
+            tableRowObject.Find("Lobby Name").GetComponent<TMP_Text>().text = lobby.Name;
+
+            tableRowObject.Find("Host").GetComponent<TMP_Text>().text = lobby.Data[HOST].Value;
+
+            tableRowObject.Find("Players").GetComponent<TMP_Text>().text = $"{lobby.Players.Count} / {lobby.MaxPlayers}";
+            
+            tableRowObject.Find("Description").GetComponent<TMP_Text>().text = lobby.Data[DESCRIPTION].Value;
+
+            tableRowObject.Find("Status").GetComponent<TMP_Text>().text = lobby.Data[STATUS].Value;
+
+            tableRowObject.GetComponent<Button>().onClick.AddListener(() => OnTableRowObjectClick(lobby.Id));
+        }
+    }
+    private void OnTableRowObjectClick(string selectedLobbyId)
+    {
+        SelectedLobbyId = selectedLobbyId;
     }
 
     private void OnCreateLobbyButtonClick()
@@ -34,6 +118,21 @@ public class LobbyTableController : MonoBehaviour
 
     private void OnJoinLobbyByCodeButtonClick()
     {
+        ModalController.Instance.InstantiateModal(joinLobbyByCodeModal);
+    }
 
+    private void OnSearchInputEndEdit(string value)
+    {
+        searchValue = value;
+    }
+
+    private void OnSearchButtonClick()
+    {
+        RenderDisplay(searchValue);
+    }
+
+    private void OnRefreshButtonClick()
+    {
+        RenderDisplay();
     }
 }

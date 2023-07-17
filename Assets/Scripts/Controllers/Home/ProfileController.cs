@@ -9,9 +9,6 @@ using static ImageUtils;
 public class ProfileController : Singleton<ProfileController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private TMP_Text usernameText;
 
     [SerializeField]
@@ -33,21 +30,26 @@ public class ProfileController : Singleton<ProfileController>
     {
         RenderDisplay();
 
-        inventory.InventoryTriggered += OnInventoryTriggered;
+        UserManager.Instance.Notify += OnNotify; ;
 
         profileButton.onClick.AddListener(OnProfileButtonClick);
     }
 
-    private void OnInventoryTriggered()
+    private void OnNotify()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void OnNotifyEvent()
     {
         RenderDisplay();
     }
 
     private void RenderDisplay()
     {
-        usernameText.text = inventory.Username;
-        bioText.text = inventory.Bio;
-        picture.sprite = CreateSpriteFromTexture(inventory.Picture) ?? CreateSpriteFromTexture(defaultPicture);
+        usernameText.text = UserManager.Instance.Username;
+        bioText.text = UserManager.Instance.Bio;
+        picture.sprite = CreateSpriteFromTexture(UserManager.Instance.Picture) ?? CreateSpriteFromTexture(defaultPicture);
     }
 
     private void OnProfileButtonClick()
@@ -56,6 +58,6 @@ public class ProfileController : Singleton<ProfileController>
     }
     private void OnDestroy()
     {
-        inventory.InventoryTriggered -= OnInventoryTriggered;
+        UserManager.Instance.Notify -= OnNotify;
     }
 }

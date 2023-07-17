@@ -10,9 +10,6 @@ using System;
 public class CharacterDeckController : Singleton<CharacterDeckController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private Transform container;
 
     private IEnumerator Start()
@@ -21,10 +18,10 @@ public class CharacterDeckController : Singleton<CharacterDeckController>
 
         RenderDisplay(true);
 
-        inventory.InventoryTriggered += OnInventoryTriggered;
+        UserManager.Instance.Notify += OnNotify;
     }
 
-    private void OnInventoryTriggered()
+    private void OnNotify()
     {
         RenderDisplay(true);
     }
@@ -36,8 +33,10 @@ public class CharacterDeckController : Singleton<CharacterDeckController>
 
     public void AddCard(string cardName)
     {
+        var deckCollection = UserManager.Instance.DeckCollection;
+
         var result = ValidateCardAddition(ComponentDeckType.Character,
-            inventory.DeckCollection.Decks[inventory.DeckCollection.SelectedDeckIndex],
+            deckCollection.Decks[deckCollection.SelectedDeckIndex],
             cardName
             );
 
@@ -53,7 +52,7 @@ public class CharacterDeckController : Singleton<CharacterDeckController>
         switch (result)
         {
             case CardAdditionResult.Success:
-                inventory.AddCard(cardName, ComponentDeckType.Character);
+                UserManager.Instance.AddCard(cardName, ComponentDeckType.Character);
 
                 RenderDisplay();
                 break;
@@ -81,8 +80,10 @@ public class CharacterDeckController : Singleton<CharacterDeckController>
     {
         DestroyAllChildGameObjects(container);
 
+        var deckCollection = UserManager.Instance.DeckCollection;
+
         var grids = SplitSpriteIntoIndexedGrids(transform, 1, 10);
-        var selectedCharacterDeck = inventory.DeckCollection.Decks[inventory.DeckCollection.SelectedDeckIndex].CharacterDeck;
+        var selectedCharacterDeck = deckCollection.Decks[deckCollection.SelectedDeckIndex].CharacterDeck;
         if (selectedCharacterDeck.Count == 0) yield break;
 
         var isAnimations = new Dictionary<int, bool>
@@ -126,13 +127,13 @@ public class CharacterDeckController : Singleton<CharacterDeckController>
 
     public void RemoveCard(string cardName)
     {
-        inventory.RemoveCard(cardName, ComponentDeckType.Character);
+        UserManager.Instance.RemoveCard(cardName, ComponentDeckType.Character);
 
         RenderDisplay(true);
     }
 
     public void OnDestroy()
     {
-        inventory.InventoryTriggered -= OnInventoryTriggered;
+        UserManager.Instance.Notify -= OnNotify;
     }
 }

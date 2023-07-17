@@ -4,9 +4,6 @@ using UnityEngine.UI;
 
 public class CardSearchBoxController : Singleton<CardSearchBoxController>
 {
-    [SerializeField] 
-    private CardSearchBoxInventory inventory;
-
     [SerializeField]
     private TMP_InputField cardNameTextInput;
 
@@ -22,20 +19,48 @@ public class CardSearchBoxController : Singleton<CardSearchBoxController>
     [SerializeField]
     private Button findButton;
 
+    public string CardName { get; set; }
+
+    public CardTypeDropdown CardType { get; set; }
+
+    public CharacterRoleDropdown CharacterRole { get; set; }
+
+    public EquipmentClassDropdown EquipmentClass { get; set; }
+
+    public void UpdateCardSearchBox(CardSearchBox data)
+    {
+        if (data.CardName != null)
+            CardName = data.CardName;
+
+        if (data.CardType != CardTypeDropdown.None)
+            CardType = data.CardType;
+
+        if (data.CharacterRole != CharacterRoleDropdown.None)
+            CharacterRole = data.CharacterRole;
+
+        if (data.CharacterRole != CharacterRoleDropdown.None)
+            EquipmentClass = data.EquipmentClass;
+    }
+
+
+    public void UpdateCardSearchBoxThenNotify(CardSearchBox data)
+    {
+        UpdateCardSearchBox(data);
+
+        ExecuteNotify();
+    }
+
     private void Start()
     {
-        inventory.SetupInventory(
-            new CardSearchBox
-            {
-                CardName = cardNameTextInput.text,
-                
-                CardType = (CardTypeDropdown) cardTypeDropdownInput.value,
 
-                CharacterRole = (CharacterRoleDropdown) characterRoleDropdownInput.value,
+        CardName = cardNameTextInput.text;
 
-                EquipmentClass = (EquipmentClassDropdown) equipmentClassDropdownInput.value,
-            }
-            );
+        CardType = (CardTypeDropdown)cardTypeDropdownInput.value;
+
+        CharacterRole = (CharacterRoleDropdown)characterRoleDropdownInput.value;
+
+        EquipmentClass = (EquipmentClassDropdown)equipmentClassDropdownInput.value;
+         
 
         cardNameTextInput.onEndEdit.AddListener(OnCardNameTextInputEndEdit);
 
@@ -50,14 +75,14 @@ public class CardSearchBoxController : Singleton<CardSearchBoxController>
 
     private void OnCardNameTextInputEndEdit(string value)
     {
-        inventory.cardName = value;
+        CardName = value;
     }
 
     private void OnCardTypeDropdownInputValueChanged(int value)
     {
-        inventory.cardType = (CardTypeDropdown) value;
+        CardType = (CardTypeDropdown) value;
 
-        switch (inventory.cardType) {
+        switch (CardType) {
             case CardTypeDropdown.Character:
                 characterRoleDropdownInput.transform.parent.gameObject.SetActive(true);
                 equipmentClassDropdownInput.transform.parent.gameObject.SetActive(false);
@@ -77,17 +102,73 @@ public class CardSearchBoxController : Singleton<CardSearchBoxController>
 
     private void OnCharacterRoleDropdownInputValueChanged(int value)
     {
-        inventory.characterRole = (CharacterRoleDropdown) value;
+        CharacterRole = (CharacterRoleDropdown) value;
     }
 
     private void OnEquipmentClassDropdownInputValueChanged(int value)
     {
-        inventory.equipmentClass = (EquipmentClassDropdown) value;
+        EquipmentClass = (EquipmentClassDropdown) value;
     }
 
     private void OnFindButtonClick()
     {
-        inventory.Notify();
+        ExecuteNotify();
     }
 
+    public delegate void NotifyEventHandler();
+
+    public event NotifyEventHandler Notify;
+
+    private void ExecuteNotify()
+    {
+        Notify?.Invoke();
+    }
+}
+public class CardSearchBox
+{
+    public string CardName { get; set; }
+    public CardTypeDropdown CardType { get; set; }
+    public CharacterRoleDropdown CharacterRole { get; set; }
+    public EquipmentClassDropdown EquipmentClass { get; set; }
+}
+
+public enum CardTypeDropdown
+{
+    None,
+
+    Character,
+
+    Equipment,
+
+    Spell,
+
+    Other
+}
+
+public enum CharacterRoleDropdown
+{
+    None,
+
+    Warrior,
+
+    Tank,
+
+    Support,
+
+    Mage,
+
+    Marksman,
+
+    Assassin
+}
+
+public enum EquipmentClassDropdown
+{
+    None,
+
+    Attack,
+
+    Magic,
+
+    Defense
 }

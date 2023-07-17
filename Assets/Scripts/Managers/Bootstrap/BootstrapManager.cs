@@ -7,13 +7,9 @@ using System.Net.Http;
 using static ApiUtils;
 using static Constants.ButtonNames;
 using static AuthApiService;
-using static ImageUtils;
-using static UserInventory;
 
 public class BootstrapManager : Singleton<BootstrapManager>
 {
-    [SerializeField]
-    private UserInventory inventory;
     public static bool Continue { get; set; }
     private IEnumerator Start()
     {
@@ -58,10 +54,8 @@ public class BootstrapManager : Singleton<BootstrapManager>
                 yield break;
             }
 
-            inventory.Init();
-
-            inventory.UpdateInventory(
-                GetUser(user)
+            UserManager.Instance.UpdateUser(
+                user
                 );
 
             LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);

@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalController>
 {
     [SerializeField]
-    private UserInventory inventory;
-
-    [SerializeField]
     private TMP_InputField deckNameTextInput;
 
     [SerializeField]
@@ -30,7 +27,7 @@ public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalCont
 
     private void OnSubmitButtonClick()
     {
-        inventory.AddDeck(deckName);
+        UserManager.Instance.AddDeck(deckName);
 
         ModalController.Instance.CloseNearestModal();
 

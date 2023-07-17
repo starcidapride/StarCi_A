@@ -218,6 +218,8 @@ public class Constants
 
         public static readonly string DESCRIPTION = "description";
 
+        public static readonly string STATUS = "status";
+
         public static readonly string RELAY_ALLOCATION_ID = "relayAllocationId";
     }
 }

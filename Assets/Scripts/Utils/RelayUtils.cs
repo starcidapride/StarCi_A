@@ -1,20 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay;
 using UnityEngine;
 
-public class RelayResponse
-{ 
-    public Guid AllocationId { get; set; }
+using static Constants.ButtonNames;
 
-    public string JoinCode { get; set; }
-
-}
 public class RelayUtils
 {
-    public static async Task<RelayResponse> CreateRelay()
+    public static async Task<string> CreateRelay()
     {
         try
         {
@@ -30,24 +26,30 @@ public class RelayUtils
                 allocation.ConnectionData
                 );
 
-            NetworkManager.Singleton.StartHost();
+            return joinCode;
 
-            LoadingSceneManager.Instance.LoadScene(SceneName.WaitingRoom, true);
-
-            return new RelayResponse()
-            {
-                AllocationId = allocation.AllocationId,
-                JoinCode = joinCode
-            };
         } catch (RelayServiceException ex)
         {
             Debug.Log(ex);
+
+            AlertController.Instance.Show(
+            AlertCaption.Error,
+            "Unable to establish a connection with the relay. Please attempt again.",
+            new List<AlertButton>()
+            {
+                  new AlertButton()
+                  {
+                      ButtonText = CANCEL,
+                      Script = typeof(AlertCancelButtonController)
+                  }
+            });
+
             return null;
         }
 
     }
 
-    public static async Task<RelayResponse> JoinRelay(string joinCode)
+    public static async Task<bool> JoinRelay(string joinCode)
     {
         try
         {
@@ -62,18 +64,25 @@ public class RelayUtils
                 joinAllocation.HostConnectionData
                 );
 
-            NetworkManager.Singleton.StartClient();
-
-            return new RelayResponse()
-            {
-                AllocationId = joinAllocation.AllocationId,
-                JoinCode = joinCode
-            };
+            return true;      
         }
         catch (RelayServiceException ex)
         {
             Debug.Log(ex);
-            return null;
+
+            AlertController.Instance.Show(
+            AlertCaption.Error,
+            "Unable to establish a connection with the relay. Please attempt again.",
+            new List<AlertButton>()
+            {
+                  new AlertButton()
+                  {
+                      ButtonText = CANCEL,
+                      Script = typeof(AlertCancelButtonController)
+                  }
+            });
+
+            return false;
         }
     } 
 

@@ -14,9 +14,6 @@ using static GameObjectUtils;
 public class CardShowcaseController : Singleton<CardShowcaseController>
 {
     [SerializeField]
-    private CardSearchBoxInventory inventory;
-
-    [SerializeField]
     private Transform container;
 
     private static int PresentPage;
@@ -25,10 +22,10 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
     {
         PresentPage = 0;
 
-        inventory.InventoryTriggered += OnInventoryTriggered;
+        CardSearchBoxController.Instance.Notify += OnNotify;
     }
 
-    private void OnInventoryTriggered()
+    private void OnNotify()
     {
         RenderDisplay();
     }
@@ -47,9 +44,9 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
 
         var sortedMap = new SortedDictionary<string, (CardType, Type)>(map.Where(kvp =>
         {
-            var cardNameFilter = kvp.Key.ContainsInsensitive(inventory.cardName);
+            var cardNameFilter = kvp.Key.ContainsInsensitive(CardSearchBoxController.Instance.CardName);
 
-            var cardTypeFilter = inventory.cardType == CardTypeDropdown.None || kvp.Value.Item1 == (CardType)inventory.cardType;
+            var cardTypeFilter = CardSearchBoxController.Instance.CardType == CardTypeDropdown.None || kvp.Value.Item1 == (CardType) CardSearchBoxController.Instance.CardType;
 
             bool IsMatchCharacterRole(CharacterRoleDropdown characterRole)
             {
@@ -60,7 +57,7 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
 
                 var card = (ICharacterCard) Activator.CreateInstance(cardClass);
 
-                if (card.CharacterRole != (CharacterRole)characterRole && inventory.characterRole != CharacterRoleDropdown.None) return false;
+                if (card.CharacterRole != (CharacterRole)characterRole && CardSearchBoxController.Instance.CharacterRole != CharacterRoleDropdown.None) return false;
 
                 return true;
             }
@@ -74,7 +71,7 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
 
                 var card = (IEquipmentCard) Activator.CreateInstance(cardClass);
 
-                if (card.EquipmentClass != (EquipmentClass)equipmentClass && inventory.equipmentClass != EquipmentClassDropdown.None) return false;
+                if (card.EquipmentClass != (EquipmentClass)equipmentClass && CardSearchBoxController.Instance.EquipmentClass != EquipmentClassDropdown.None) return false;
 
    
                 return true;
@@ -82,14 +79,14 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
 
 
             var characterRoleFilter =
-            inventory.cardType != CardTypeDropdown.Character 
-            || inventory.characterRole == CharacterRoleDropdown.None
-            || IsMatchCharacterRole(inventory.characterRole);
+            CardSearchBoxController.Instance.CardType != CardTypeDropdown.Character 
+            || CardSearchBoxController.Instance.CharacterRole == CharacterRoleDropdown.None
+            || IsMatchCharacterRole(CardSearchBoxController.Instance.CharacterRole);
 
             var equipmentClassFilter =
-            inventory.cardType != CardTypeDropdown.Equipment
-            || inventory.equipmentClass == EquipmentClassDropdown.None
-            || IsMatchEquipmentRole(inventory.equipmentClass);
+            CardSearchBoxController.Instance.CardType != CardTypeDropdown.Equipment
+            || CardSearchBoxController.Instance.EquipmentClass == EquipmentClassDropdown.None
+            || IsMatchEquipmentRole(CardSearchBoxController.Instance.EquipmentClass);
 
             return cardNameFilter && cardTypeFilter && characterRoleFilter && equipmentClassFilter;
 
@@ -111,7 +108,7 @@ public class CardShowcaseController : Singleton<CardShowcaseController>
 
     private void OnDestroy()
     {
-        inventory.InventoryTriggered -= OnInventoryTriggered;
+        UserManager.Instance.Notify -= OnNotify;
     }
 
 }
