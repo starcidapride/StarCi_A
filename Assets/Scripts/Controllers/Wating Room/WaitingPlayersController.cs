@@ -30,10 +30,10 @@ public class WaitingPlayersController : Singleton<WaitingPlayersController>
     private TMP_Text opponentsUsername;
 
     [SerializeField]
-    private Transform yourHostIcon;
+    private Transform yourHost;
 
     [SerializeField]
-    private Transform oppponentHostIcon;
+    private Transform oppponentHost;
 
     [SerializeField]
     private Transform yourReady;
@@ -57,7 +57,7 @@ public class WaitingPlayersController : Singleton<WaitingPlayersController>
         yourReady.gameObject.SetActive(NetworkGameManager.Instance.ConnectedUsers.Value.users.
             First(user => user.email.ToString() == NetworkGameManager.Instance.You.Email).isReady);
 
-        yourHostIcon.gameObject.SetActive(NetworkManager.Singleton.IsHost);
+        yourHost.gameObject.SetActive(NetworkManager.Singleton.IsHost);
 
         if (NetworkGameManager.Instance.Opponent != null)
         {
@@ -72,7 +72,7 @@ public class WaitingPlayersController : Singleton<WaitingPlayersController>
             opponentsReady.gameObject.SetActive(NetworkGameManager.Instance.ConnectedUsers.Value.users.
             First(user => user.email.ToString() != NetworkGameManager.Instance.You.Email).isReady);
 
-            oppponentHostIcon.gameObject.SetActive(NetworkManager.Singleton.IsHost);
+            oppponentHost.gameObject.SetActive(!NetworkManager.Singleton.IsHost);
         } else
         {
             opponent.color = GRAY;

@@ -82,6 +82,10 @@ public class Constants
 
         public static readonly string CANCEL = "Cancel";
 
+        public static readonly string YES = "Yes";
+
+        public static readonly string NO = "No";
+
         public static readonly string RESENT = "Resent";
     }
 

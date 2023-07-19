@@ -27,7 +27,7 @@ public class WaitingRoomButtonsController : Singleton<WaitingRoomButtonsControll
         if (NetworkManager.Singleton.IsHost)
         {
             var ready = NetworkGameManager.Instance.ConnectedUsers.Value.users.Select(user => user.isReady).
-                Where(ready => ready == true).ToArray().Length == 0;
+                Where(ready => ready == true).ToArray().Length == 2;
 
             if  ( ready ) {
                 startButton.interactable = true;

@@ -78,6 +78,8 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
 
         if (!IsHost)
         {
+            valueChangedType = ConnectedUsersValueChangedType.ConnectOpponent;
+
             UpdateConnectedUsersServerRpc(currentConnectedUser);
         }
     }

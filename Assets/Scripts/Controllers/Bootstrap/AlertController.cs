@@ -15,7 +15,9 @@ public enum AlertCaption
     [Description("Success")]
     Success,
     [Description("Error")]
-    Error
+    Error,
+    [Description("Confirm")]
+    Confirm
 }
 
 public class AlertButton
@@ -57,12 +59,6 @@ public class AlertController : SingletonPersistent<AlertController>
 
     public void Show(AlertCaption caption, string message, List<AlertButton> buttons = null)
     {
-        StartCoroutine(ShowCoroutine(caption, message, buttons));
-    }
-
-    private IEnumerator ShowCoroutine(AlertCaption caption, string message, List<AlertButton> buttons = null)
-    {
-
         if (buttons != null && (buttons.Count < 0 || buttons.Count > 2))
         {
             throw new ArgumentException("Invalid number of buttons. The allowed range is from 0 to 2.");
@@ -108,9 +104,6 @@ public class AlertController : SingletonPersistent<AlertController>
             }
         }
 
-            alertBackdrop.gameObject.SetActive(true);
-
-            yield return WaitForAnimationCompletion(messageBox);
-        
+        alertBackdrop.gameObject.SetActive(true);
     }
 }

@@ -11,6 +11,9 @@ using static Constants.LobbyService;
 using static RelayUtils;
 
 using static LobbyUtils;
+using static Constants.ButtonNames;
+
+using System.Collections.Generic;
 
 public enum SceneName : byte
 {
@@ -38,6 +41,43 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
     private SceneName sceneActive;
     public SceneName SceneActive => sceneActive;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            var currentScene =  GetEnumValueByDescription<SceneName>(SceneManager.GetActiveScene().name);
+
+            switch (currentScene)
+            {
+                case SceneName.CardWarehouse:
+                    LoadScene(SceneName.Home, false);
+                    break;
+
+                case SceneName.LobbyRoom:
+                    LoadScene(SceneName.Home, false);
+                    break;
+
+                case SceneName.Home:
+                    AlertController.Instance.Show(AlertCaption.Confirm, "Do you want to quit?",
+                        new List<AlertButton>()
+                        {
+                            new AlertButton()
+                            {
+                                ButtonText = NO,
+                                Script = typeof(AlertCancelButtonController)
+                            },
+                            new AlertButton()
+                            {   
+                                ButtonText = YES,
+                                Script = typeof(QuitButtonController)
+                            }
+                        }
+                        );
+                    break; 
+            }
+
+        }
+    }
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneChange;
@@ -45,6 +85,7 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
     private void OnSceneChange(Scene scene, LoadSceneMode mode)
     {
+
     }
 
     public void LoadScene(SceneName sceneToLoad, bool isNetworkSessionAction = true)
@@ -67,7 +108,7 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
             LoadSceneLocal(sceneToLoad);
         }
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         LoadingFadeEffectController.Instance.FadeOut();
     }

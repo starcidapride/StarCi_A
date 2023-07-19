@@ -23,7 +23,7 @@ public class LoadingFadeEffectController : SingletonPersistent<LoadingFadeEffect
     {
         yield return StartCoroutine(FadeInEffect());
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         yield return StartCoroutine(FadeOutEffect());
     }
