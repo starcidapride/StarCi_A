@@ -5,13 +5,13 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using System.Linq;
+using Unity.VisualScripting;
+using Newtonsoft.Json;
 
 using static LobbyUtils;
 using static RelayUtils;
 using static Constants.LobbyService;
-using System.Linq;
-using Unity.VisualScripting;
-using Newtonsoft.Json;
 
 using static GameObjectUtils;
 
@@ -46,7 +46,20 @@ public class LobbyTableController : Singleton<LobbyTableController>
 
     private string searchValue;
 
-    public string SelectedLobbyId { get; set; }
+    private string selectedLobbyId;
+    public string SelectedLobbyId
+    {
+        get { return selectedLobbyId; }
+        set
+        {
+            if (selectedLobbyId != value)
+            {   
+                selectedLobbyId = value;
+
+                ExecuteNotify();
+            }
+        }
+    }
 
     private IEnumerator Start()
     {   
@@ -93,6 +106,8 @@ public class LobbyTableController : Singleton<LobbyTableController>
         {
             var tableRowObject = Instantiate(tableRow, tableBody);
 
+            tableRowObject.GetComponent<TableRowController>().LobbyId = lobby.Id;
+
             tableRowObject.Find("Lobby Name").GetComponent<TMP_Text>().text = lobby.Name;
 
             tableRowObject.Find("Host").GetComponent<TMP_Text>().text = lobby.Data[HOST].Value;
@@ -102,13 +117,7 @@ public class LobbyTableController : Singleton<LobbyTableController>
             tableRowObject.Find("Description").GetComponent<TMP_Text>().text = lobby.Data[DESCRIPTION].Value;
 
             tableRowObject.Find("Status").GetComponent<TMP_Text>().text = lobby.Data[STATUS].Value;
-
-            tableRowObject.GetComponent<Button>().onClick.AddListener(() => OnTableRowObjectClick(lobby.Id));
         }
-    }
-    private void OnTableRowObjectClick(string selectedLobbyId)
-    {
-        SelectedLobbyId = selectedLobbyId;
     }
 
     private void OnCreateLobbyButtonClick()
@@ -134,5 +143,14 @@ public class LobbyTableController : Singleton<LobbyTableController>
     private void OnRefreshButtonClick()
     {
         RenderDisplay();
+    }
+
+    public delegate void NotifyEventHandler();
+
+    public event NotifyEventHandler Notify;
+
+    private void ExecuteNotify()
+    {
+        Notify?.Invoke();
     }
 }

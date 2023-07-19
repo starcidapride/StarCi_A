@@ -26,6 +26,8 @@ public class Constants
 
             public static readonly string SETUP_PROFILE_API = SERVER_URL + PROFILE + "setup-profile";
 
+            public static readonly string GET_PROFILE_API = SERVER_URL + PROFILE + "get-profile";
+
         }
 
         public class Deck

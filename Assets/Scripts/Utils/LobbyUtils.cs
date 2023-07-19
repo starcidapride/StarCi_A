@@ -10,6 +10,7 @@ using static Constants.LobbyService;
 using static EnumUtils;
 using static Constants.ButtonNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using Unity.Services.Authentication;
 
 public enum LobbyStatus
 {
@@ -253,6 +254,19 @@ public class LobbyUtils
             }
 
             return null;
+        }
+    }
+
+    public static async Task<bool> LeaveLobby(string lobbyId)
+    {
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(lobbyId, AuthenticationService.Instance.PlayerId);
+            return true;
+        } catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+            return false;
         }
     }
 

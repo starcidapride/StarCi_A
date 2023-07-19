@@ -66,12 +66,6 @@ public class JoinLobbyByCodeModalController : Singleton<JoinLobbyByCodeModalCont
 
         if (lobby == null) return;
 
-        var joinCode = lobby.Data[RELAY_CODE].Value;
-
-        var result = await JoinRelay(joinCode);
-
-        if (!result) return;
-
-        NetworkManager.Singleton.StartClient();
+        LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
     }
 }

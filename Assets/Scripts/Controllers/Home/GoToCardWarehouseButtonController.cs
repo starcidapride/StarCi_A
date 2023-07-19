@@ -5,13 +5,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DeckCollectionController : Singleton<DeckCollectionController>
+public class GoToCardWarehouseButtonController : Singleton<GoToCardWarehouseButtonController>
 {
-    [SerializeField]
     private Button goToCardWarehouseButton;
 
     private void Start()
     {
+        goToCardWarehouseButton = GetComponent<Button>();
+
         goToCardWarehouseButton.onClick.AddListener(OnGoToCardWarehouseButton);
     }
 

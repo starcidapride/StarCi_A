@@ -53,19 +53,29 @@ public class ApiUtils
     public static async Task<AuthTokenSet> ExecuteRefresh()
     {
         using var client = new HttpClient();
-        AttachAuthTokenToHttpRequestHeader(client, AuthTokenType.RefreshToken);
+        try
+        {
+            AttachAuthTokenToHttpRequestHeader(client, AuthTokenType.RefreshToken);
 
-        var response = await client.GetAsync(REFRESH_API);
+            var response = await client.GetAsync(REFRESH_API);
 
-        if (!response.IsSuccessStatusCode) return null;
+            if (!response.IsSuccessStatusCode) return null;
 
-        var data = await response.Content.ReadAsStringAsync();
+            var data = await response.Content.ReadAsStringAsync();
 
-        var authTokens = JsonConvert.DeserializeObject<AuthTokenSet>(data);
+            var authTokens = JsonConvert.DeserializeObject<AuthTokenSet>(data);
 
-        SaveAuthenticationTokens(authTokens.AccessToken, authTokens.RefreshToken);
+            SaveAuthenticationTokens(authTokens.AccessToken, authTokens.RefreshToken);
 
-        return authTokens;
+            return authTokens;
+        }
+        catch (HttpRequestException ex)
+        {
+            return null;
+        }
+        
+
+       
     }
 }
 

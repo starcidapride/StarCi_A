@@ -96,9 +96,9 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
 
     private async void OnSubmitButtonClick()
     {
-        await ExecuteSetupProfle
+        await ExecuteSetupProfile
             (
-            new SetupProflieRequest()
+            new SetupProfileRequest()
             {
                 Username = username,
                 Picture = EncodeBase64Image(picture),

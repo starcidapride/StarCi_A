@@ -91,6 +91,7 @@
     <Compile Include="Assets\Scripts\Controllers\Wating Room\LobbyDetailsController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Spells\Cleanse.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Characters\Cresht.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Lobby\TableRowController.cs" />
     <Compile Include="Assets\Scripts\Utils\GridUtils.cs" />
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardPreviewPanelController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Equipments\IEquipmentCard.cs" />
@@ -102,9 +103,10 @@
     <Compile Include="Assets\Scripts\Cards\Collection\Others\Invocation.cs" />
     <Compile Include="Assets\Scripts\Controllers\Bootstrap\AlertController.cs" />
     <Compile Include="Assets\Scripts\Utils\ImageUtils.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Home\PlayMenuController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Home\HomeButtonsController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Spells\Barrier.cs" />
     <Compile Include="Assets\Scripts\Apis\ApiUtils.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Wating Room\WaitingPlayersController.cs" />
     <Compile Include="Assets\Scripts\Managers\Home\HomeManager.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Characters\Baldum.cs" />
     <Compile Include="Assets\Scripts\Utils\AuthenticationUtils.cs" />
@@ -120,11 +122,10 @@
     <Compile Include="Assets\Scripts\Cards\Collection\ICard.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardPreviewPanelHoverEventController.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\SpellCardController.cs" />
-    <Compile Include="Assets\Scripts\Controllers\Home\DeckCollectionController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Lobby\JoinLobbyButtonController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\CardShowcaseDragAreaController.cs" />
     <Compile Include="Assets\Scripts\Cards\Collection\Characters\TelAnnas.cs" />
-    <Compile Include="Assets\Scripts\Managers\Waiting Room\NetworkWaitingRoomManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\Bootstrap\NetworkGameManager.cs" />
     <Compile Include="Assets\Scripts\Cards\CardUtils.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\EquipmentCardController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Lobby\Modals\JoinLobbyByCodeModalController.cs" />
@@ -132,11 +133,11 @@
     <Compile Include="Assets\Scripts\Controllers\Lobby\LobbyTableController.cs" />
     <Compile Include="Assets\Scripts\Cards\Controllers\Events\Card Warehouse\CardShowcaseClickEventController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Card Warehouse\Modals\CreateFirstDeckModalController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Home\GoToCardWarehouseButtonController.cs" />
     <Compile Include="Assets\Scripts\Utils\RelayUtils.cs" />
     <Compile Include="Assets\Scripts\Controllers\Extras\ResentButtonController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Lobby\Modals\CreateLobbyModalController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Authentication\Modals\SignUpModalController.cs" />
-    <Compile Include="Assets\TableRowController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

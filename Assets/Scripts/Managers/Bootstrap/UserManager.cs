@@ -20,9 +20,23 @@ public class UserManager : SingletonPersistent<UserManager>
     public string LastName { get; set; }
     public DeckCollection DeckCollection { get; set; }
 
+    public User GetUser()
+    {
+        return new User()
+        {
+            Email = Email,
+            Username = Username,
+            Picture = Picture,
+            Bio = Bio,
+            FirstName = FirstName,
+            LastName = LastName,
+            DeckCollection = DeckCollection
+        };
+    }
+
     public void UpdateUser(PresentableUser user)
     {
-        var _user = GetUser(user);
+        var _user = MapPresentableUserToUser(user);
 
         UpdateUser(_user);
     }
@@ -180,7 +194,7 @@ public class UserManager : SingletonPersistent<UserManager>
 
         if (user == null) return;
 
-        UpdateUserThenNotify(GetUser(user));
+        UpdateUserThenNotify(MapPresentableUserToUser(user));
 
         AlertController.Instance.Show(
            AlertCaption.Success,
@@ -195,10 +209,10 @@ public class UserManager : SingletonPersistent<UserManager>
            }
        );
     }
-    private User GetUser(PresentableUser user)
+    public static User MapPresentableUserToUser(PresentableUser user)
     {
         return new User()
-        {
+        {   
             Email = user.Email,
 
             Username = user.Username,

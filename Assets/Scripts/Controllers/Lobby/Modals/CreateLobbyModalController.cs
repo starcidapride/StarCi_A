@@ -109,14 +109,14 @@ public class CreateLobbyModalController : Singleton<CreateLobbyModalController>
 
         if (lobby == null) return;
         
-        NetworkManager.Singleton.StartHost();
-        
         LoadingController.Instance.Hide();
 
         ModalController.Instance.CloseNearestModal();
 
-        NetworkWaitingRoomManager.Lobby = lobby;
+        NetworkGameManager.Lobby = lobby;
 
-        LoadingSceneManager.Instance.LoadScene(SceneName.WaitingRoom, true);
+        NetworkManager.Singleton.StartHost();
+
+        LoadingSceneManager.Instance.LoadScene(SceneName.WaitingRoom);
     }
 }

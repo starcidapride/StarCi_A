@@ -1,11 +1,16 @@
 using System.Collections;
 using System.ComponentModel;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using static EnumUtils;
+using static Constants.LobbyService;
+using static RelayUtils;
+
+using static LobbyUtils;
 
 public enum SceneName : byte
 {
@@ -40,18 +45,6 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
     private void OnSceneChange(Scene scene, LoadSceneMode mode)
     {
-        var sceneName = GetEnumValueByDescription<SceneName>(scene.name);
-
-        switch (sceneName)
-        {
-            case SceneName.LobbyRoom:
-
-                return;
-
-            case SceneName.WaitingRoom:
-
-                return;
-        }
     }
 
     public void LoadScene(SceneName sceneToLoad, bool isNetworkSessionAction = true)
@@ -93,5 +86,30 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
             GetDescription(sceneToLoad),
             LoadSceneMode.Single);
     }
+    
+    public void JoinRelayAndStartClient(Lobby lobby)
+    {
+        StartCoroutine(JoinRelayAndStartClientCoroutine(lobby));
+    }
 
+    private IEnumerator JoinRelayAndStartClientCoroutine(Lobby lobby)
+    {
+        var joinCode = lobby.Data[RELAY_CODE].Value;
+
+        var resultTask = JoinRelay(joinCode);
+
+        yield return new WaitUntil(() => resultTask.IsCompleted);
+
+        if (!resultTask.Result) yield break;
+
+        LoadingFadeEffectController.Instance.FadeIn();
+
+        yield return new WaitUntil(() => LoadingFadeEffectController.beginLoad);
+
+        NetworkManager.Singleton.StartClient();
+
+        yield return new WaitForSeconds(1);
+
+        LoadingFadeEffectController.Instance.FadeOut();
+    }
 }

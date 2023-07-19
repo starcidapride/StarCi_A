@@ -37,11 +37,6 @@ public class ProfileController : Singleton<ProfileController>
 
     private void OnNotify()
     {
-        throw new System.NotImplementedException();
-    }
-
-    private void OnNotifyEvent()
-    {
         RenderDisplay();
     }
 

@@ -8,6 +8,7 @@ using System.Text;
 using static Constants.Apis.Authentication;
 using static ApiUtils;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class AuthTokenSet
 {
@@ -128,7 +129,7 @@ public class AuthApiService
                     return null;
                 }
 
-                return await ExecuteInit(clientErrorHandler);
+                return await ExecuteInit(clientErrorHandler, refreshTokenExpirationHandler);
             }
             else
             {

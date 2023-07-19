@@ -44,6 +44,11 @@ public class GameObjectUtils
         return rect.Contains(localPosition);
     }
 
+    public static bool IsMousePositionInsideRectTransformArea(RectTransform area)
+    {
+        return IsPositionInsideRectTransformArea(GetMousePos(), area);
+    }
+
 
     public static Transform GetParentGameObjectInHierarchy(Transform transform, int generation)
     {

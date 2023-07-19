@@ -10,7 +10,7 @@ using static RelayUtils;
 using static Constants.LobbyService;
 
 
-public class PlayMenuController : Singleton<PlayMenuController>
+public class HomeButtonsController : Singleton<HomeButtonsController>
 {
     [SerializeField]
     private Button goToLobbyRoomButton;
@@ -36,12 +36,6 @@ public class PlayMenuController : Singleton<PlayMenuController>
         
         if (lobby == null) return;
 
-        var joinCode = lobby.Data[RELAY_CODE].Value;
-
-        var result = await JoinRelay(joinCode);
-
-        if (!result) return;
-
-        NetworkManager.Singleton.StartClient();
+        LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
     }
 }

@@ -6,8 +6,10 @@ using System.Net;
 
 using static Constants.Apis.Profile;
 using static ApiUtils;
+using System;
+using System.Diagnostics;
 
-public class SetupProflieRequest
+public class SetupProfileRequest
 {
     [JsonProperty("username")]
     public string Username { get; set; }
@@ -21,7 +23,7 @@ public class SetupProflieRequest
 public class ProfileApiService
 {
    
-    public static async Task<PresentableUser> ExecuteSetupProfle(SetupProflieRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
+    public static async Task<PresentableUser> ExecuteSetupProfile(SetupProfileRequest request, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
 
@@ -49,7 +51,7 @@ public class ProfileApiService
                     return null;
                 }
 
-                return await ExecuteSetupProfle(request, clientErrorHandler);
+                return await ExecuteSetupProfile(request, clientErrorHandler);
             }
             if (!response.IsSuccessStatusCode)
             {
@@ -68,6 +70,36 @@ public class ProfileApiService
             clientErrorHandler?.Invoke(ex);
 
             LoadingController.Instance.Hide();
+            return null;
+        }
+    }
+
+
+    public static async Task<PresentableUser> ExecuteGetProfile(string email, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
+    {
+        using var client = new HttpClient();
+
+        try
+        {
+            var uriBuilder = new UriBuilder(GET_PROFILE_API);
+            uriBuilder.Path += $"/{email}";
+
+            var response = await client.GetAsync(uriBuilder.ToString());
+
+            var data = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                failedResponseHandler?.Invoke(data, response.StatusCode);
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<PresentableUser>(data);
+
+        }
+        catch (HttpRequestException ex)
+        {
+            clientErrorHandler?.Invoke(ex);
             return null;
         }
     }

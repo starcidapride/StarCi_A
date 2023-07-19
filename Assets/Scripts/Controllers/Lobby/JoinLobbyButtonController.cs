@@ -8,31 +8,42 @@ using static LobbyUtils;
 using static RelayUtils;
 
 using static Constants.LobbyService;
-using System.Threading.Tasks;
 
 public class JoinLobbyButtonController : Singleton<JoinLobbyButtonController>
 {
+    private Button button;
     private void Start()
     {
-        GetComponent<Button>().onClick.AddListener(OnButtonClick);
+        button = GetComponent<Button>();
+        
+        button.onClick.AddListener(OnButtonClick);
+
+        LobbyTableController.Instance.Notify += OnNotify;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    private void OnNotify()
+    {
+        if (LobbyTableController.Instance.SelectedLobbyId == null)
+        {
+            button.interactable = false;
+        } else
+        {
+            button.interactable = true;
+        }
     }
 
     private async void OnButtonClick()
-    { 
-            GetComponent<Button>().interactable = false;
-
+    {
             var lobby = await JoinLobbyById(LobbyTableController.Instance.SelectedLobbyId, UserManager.Instance.Username);
 
             if (lobby == null) return;
 
-            var joinCode = lobby.Data[RELAY_CODE].Value;
-
-            var result = await JoinRelay(joinCode);
-
-            if (!result) return;
-
-            NetworkManager.Singleton.StartClient();     
+        LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
     }
-
 
 }
