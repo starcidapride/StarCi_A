@@ -138,6 +138,8 @@
     <Compile Include="Assets\Scripts\Controllers\Extras\ResentButtonController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Lobby\Modals\CreateLobbyModalController.cs" />
     <Compile Include="Assets\Scripts\Controllers\Authentication\Modals\SignUpModalController.cs" />
+    <Compile Include="Assets\Scripts\Managers\WaitingRoomManager.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Wating Room\WaitingRoomButtonsController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

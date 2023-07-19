@@ -31,7 +31,7 @@ public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalCont
 
         ModalController.Instance.CloseNearestModal();
 
-        CardWarehouseManager.Instance.DisplayUI();
+        WaitingRoomManager.Instance.DisplayUI();
     }
 
 }

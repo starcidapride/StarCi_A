@@ -1,16 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-using static ProfileApiService;
 using static ImageUtils;
-using Newtonsoft.Json;
+using static Constants.Colors;
+using Unity.Netcode;
+using System.Linq;
 
-public class WaitingPlayersController : SingletonNetwork<WaitingPlayersController>
+public class WaitingPlayersController : Singleton<WaitingPlayersController>
 {
 
     [SerializeField]
@@ -20,7 +18,7 @@ public class WaitingPlayersController : SingletonNetwork<WaitingPlayersControlle
     private Transform opponentContainer;
 
     [SerializeField]
-    private Image yourImage;
+    private Image yourPicture;
 
     [SerializeField]
     private Image opponentsPicture;
@@ -43,48 +41,49 @@ public class WaitingPlayersController : SingletonNetwork<WaitingPlayersControlle
     [SerializeField]
     private Transform opponentsReady;
 
-    public override void OnNetworkSpawn()
+    public void Start()
     {
         NetworkGameManager.Instance.Notify += OnNotify;
+        
+        RenderDisplay();
+    }
 
-        StartCoroutine(OnNetworkSpawnCoroutine());
+    private void RenderDisplay()
+    {
+        yourPicture.sprite = CreateSpriteFromTexture(NetworkGameManager.Instance.You.Picture);
+        
+        yourUserame.text = NetworkGameManager.Instance.You.Username;
+
+        yourReady.gameObject.SetActive(NetworkGameManager.Instance.ConnectedUsers.Value.users.
+            First(user => user.email.ToString() == NetworkGameManager.Instance.You.Email).isReady);
+
+        yourHostIcon.gameObject.SetActive(NetworkManager.Singleton.IsHost);
+
+        if (NetworkGameManager.Instance.Opponent != null)
+        {
+            opponent.color = Color.white;
+
+            opponentContainer.gameObject.SetActive(true);
+
+            opponentsUsername.text = NetworkGameManager.Instance.Opponent.Username;
+
+            opponentsPicture.sprite = CreateSpriteFromTexture(NetworkGameManager.Instance.Opponent.Picture);
+
+            opponentsReady.gameObject.SetActive(NetworkGameManager.Instance.ConnectedUsers.Value.users.
+            First(user => user.email.ToString() != NetworkGameManager.Instance.You.Email).isReady);
+
+            oppponentHostIcon.gameObject.SetActive(NetworkManager.Singleton.IsHost);
+        } else
+        {
+            opponent.color = GRAY;
+
+            opponentContainer.gameObject.SetActive(false);
+        }
+
     }
 
     private void OnNotify()
     {
-        if (NetworkGameManager.Instance.Opponent != null)
-        {
-            HandleOpponentJoin();
-        }
-        else
-        {
-            HandleOpponentLeave();
-        }
-    }
-
-
-    private IEnumerator OnNetworkSpawnCoroutine()
-    {
-        yield return new WaitUntil(() => NetworkGameManager.Instance.You != null);
-
-        yourImage.sprite = CreateSpriteFromTexture(NetworkGameManager.Instance.You.Picture);
-
-        yourUserame.text = NetworkGameManager.Instance.You.Username;
-    }
-
-    private void HandleOpponentJoin()
-    {
-        opponent.color = Color.white;
-
-        opponentContainer.gameObject.SetActive(true);
-
-        opponentsPicture.sprite = CreateSpriteFromTexture(NetworkGameManager.Instance.Opponent.Picture);
-
-        opponentsUsername.text = NetworkGameManager.Instance.Opponent.Username;
-    }
-
-    private void HandleOpponentLeave()
-    {
-
+        RenderDisplay();
     }
 }

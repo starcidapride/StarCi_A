@@ -12,13 +12,22 @@ using System.Linq;
 using static LobbyUtils;
 using static Constants.LobbyService;
 using static ProfileApiService;
-using Newtonsoft.Json.Serialization;
+
+using static EnumUtils;
+using UnityEngine.SceneManagement;
+
+public enum ConnectedUsersValueChangedType
+{
+    ConnectOpponent,
+    Update
+
+}
 
 public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
-{  
+{
     public static Lobby Lobby { get; set; }
 
-    public NetworkVariable<FixedString32Bytes> LobbyCode = new ();
+    public NetworkVariable<FixedString32Bytes> LobbyCode = new();
 
     public NetworkVariable<FixedString32Bytes> LobbyName = new();
 
@@ -26,47 +35,19 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
 
     public NetworkVariable<bool> Private = new();
 
-    public NetworkVariable<NetworkUsers> ConnectedUsers = new(new NetworkUsers() { users = new List<NetworkUser>(),
-    }, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner
+    public NetworkVariable<NetworkUsers> ConnectedUsers = new(new NetworkUsers() { users = new List<NetworkUser>() },
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner
     );
 
+
     public User You { get; set; }
+    public User Opponent { get; set; }
 
-    private User opponent;
-    public User Opponent
-    {
-        get { return opponent; }
-        set {  if (opponent != value) {
-
-                opponent = value;
-
-                ExecuteNotify();
-            }
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void UpdateConnectedUsersServerRpc(NetworkUsers users, ServerRpcParams serverParams = default)
-    {
-        ConnectedUsers.Value = users;
-    }
-
-    public delegate void NotifyEventHandler();
-
-    public event NotifyEventHandler Notify;
-
-    private void ExecuteNotify()
-    {
-        Notify?.Invoke();
-    }
-
-    private bool canUpdate = false;
-
-
-
+    private ConnectedUsersValueChangedType valueChangedType = ConnectedUsersValueChangedType.ConnectOpponent;
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Spawned");
+
+        ConnectedUsers.OnValueChanged = OnConnectedUsersValueChanged;
 
         if (IsHost)
         {
@@ -83,59 +64,123 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
 
         You = UserManager.Instance.GetUser();
 
-            var currentConnectedUser = ConnectedUsers.Value;
-            
-            var deck = You.DeckCollection.Decks[You.DeckCollection.SelectedDeckIndex];
+        var currentConnectedUser = ConnectedUsers.Value;
 
+        var deck = You.DeckCollection.Decks[You.DeckCollection.SelectedDeckIndex];
 
         currentConnectedUser.users.Add(new NetworkUser()
         {
             clientId = NetworkManager.LocalClientId,
             email = You.Email,
             username = You.Username,
-
-            gameSnapshot = new NetworkGameSnapshot()
-            {
-                playDeckCards = deck.PlayDeck.Select(card => new FixedString32Bytes(card)).ToList(),
-
-                characterDeckCards = deck.CharacterDeck.Select(card => new FixedString32Bytes(card)).ToList(),
-
-                handCards = new List<FixedString32Bytes>()
-            }
+            isReady = false
         });
 
-        if (IsClient)
+        if (!IsHost)
         {
             UpdateConnectedUsersServerRpc(currentConnectedUser);
         }
-            
-        canUpdate = true;
     }
 
-    private async void Update()
-    {
-        if (canUpdate)
+    private async void OnConnectedUsersValueChanged(NetworkUsers previous, NetworkUsers current)
+    {   
+        switch (valueChangedType)
         {
-            if (ConnectedUsers.Value.users.Count > 1)
-            {
+            case ConnectedUsersValueChangedType.ConnectOpponent:
+                var user = await ExecuteGetProfile(
+                              ConnectedUsers.Value.users.
+                              First(user => user.clientId != NetworkManager.LocalClientId)
+                              .email.ToString());
 
-                    var user = await ExecuteGetProfile(
-                    ConnectedUsers.Value.users.
-                    Where(user => user.clientId != NetworkManager.LocalClientId).
-                    First().email.ToString());
-
-                
                 if (user == null) return;
-
+                
                 Opponent = UserManager.MapPresentableUserToUser(user);
 
-                canUpdate = false;
-            }
+                if (!IsHost)
+                {
+                    WaitingRoomManager.Instance.DisplayUI();
+                }
+                else
+                {
+                    ExecuteNotify();
+                }
+                break;
+
+            case ConnectedUsersValueChangedType.Update:
+                ExecuteNotify();
+                break;
+
         }
     }
 
-}
+    private void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    public void OnReadyButtonClick()
+    {
+        var users = ConnectedUsers.Value;
 
+        var clientId = NetworkManager.LocalClientId;
+
+        var userIndex = users.users.FindIndex(u => u.clientId == clientId);
+        if (userIndex >= 0)
+        {
+            var user = users.users[userIndex];
+            user.isReady = !user.isReady;
+            users.users[userIndex] = user;
+        }
+
+        valueChangedType = ConnectedUsersValueChangedType.Update;
+
+        UpdateConnectedUsersServerRpc(users);
+    }
+
+    public void OnStartButtonClick()
+    {
+
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateConnectedUsersServerRpc(NetworkUsers users, ServerRpcParams serverParams = default)
+    {
+        ConnectedUsers.Value = users;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StartCoroutine(OnSceneLoadedCoroutine(scene));
+    }
+
+    private IEnumerator OnSceneLoadedCoroutine(Scene scene)
+    {
+
+        var sceneName = GetEnumValueByDescription<SceneName>(scene.name);
+
+        switch (sceneName)
+        {
+            case SceneName.WaitingRoom:
+
+                yield return new WaitUntil(() => You != null);
+
+                if (IsHost)
+                {
+                    WaitingRoomManager.Instance.DisplayUI();
+                }
+
+                break;
+        }
+    }
+
+
+    public delegate void NotifyEventHandler();
+
+    public event NotifyEventHandler Notify;
+    private void ExecuteNotify()
+    {
+        Notify?.Invoke();
+    }
+}
 
 
 public struct NetworkUsers : INetworkSerializable
@@ -151,7 +196,7 @@ public struct NetworkUsers : INetworkSerializable
             usersArray = users.ToArray();
         }
 
-            int usersLength = 0;
+        int usersLength = 0;
 
         if (!serializer.IsReader)
         {
@@ -176,27 +221,28 @@ public struct NetworkUsers : INetworkSerializable
         }
     }
 }
-    public struct NetworkUser : INetworkSerializable
+public struct NetworkUser : INetworkSerializable
+{
+    public ulong clientId;
+
+    public FixedString64Bytes email;
+
+    public FixedString64Bytes username;
+
+    public bool isReady;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
-        public ulong clientId;
-        public FixedString64Bytes email;
-        public FixedString64Bytes username;
+        serializer.SerializeValue(ref clientId);
 
-        public NetworkGameSnapshot gameSnapshot;
+        serializer.SerializeValue(ref email);
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref clientId);
+        serializer.SerializeValue(ref username);
 
-            serializer.SerializeValue(ref email);
-
-            serializer.SerializeValue(ref username);
-
-            serializer.SerializeValue(ref gameSnapshot);
-        }
-
+        serializer.SerializeValue(ref isReady);
     }
 
+}
 public struct NetworkGameSnapshot : INetworkSerializable
 {
     public List<FixedString32Bytes> playDeckCards;
@@ -216,9 +262,9 @@ public struct NetworkGameSnapshot : INetworkSerializable
         {
             playDeckCardsArray = playDeckCards.ToArray();
 
-            characterDeckCardsArray = characterDeckCards.ToArray ();
+            characterDeckCardsArray = characterDeckCards.ToArray();
 
-            handCardsArray = handCards.ToArray ();
+            handCardsArray = handCards.ToArray();
         }
 
         int playDeckCardsLength = 0;
@@ -248,7 +294,7 @@ public struct NetworkGameSnapshot : INetworkSerializable
 
             characterDeckCardsArray = new FixedString32Bytes[characterDeckCardsLength];
 
-            handCardsArray = new FixedString32Bytes[handCardsLength] ;
+            handCardsArray = new FixedString32Bytes[handCardsLength];
         }
 
         for (int i = 0; i < playDeckCardsLength; i++)
@@ -277,4 +323,5 @@ public struct NetworkGameSnapshot : INetworkSerializable
     }
 }
 
-    
+
+

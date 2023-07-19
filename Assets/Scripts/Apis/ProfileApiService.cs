@@ -101,6 +101,6 @@ public class ProfileApiService
         {
             clientErrorHandler?.Invoke(ex);
             return null;
-        }
+        } 
     }
 }

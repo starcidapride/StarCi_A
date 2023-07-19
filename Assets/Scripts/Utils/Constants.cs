@@ -1,8 +1,18 @@
 ﻿using UnityEditor;
+using UnityEngine;
 using static Constants.Apis;
 
 public class Constants
 {
+    public class Transforms
+    {
+        public static readonly string UI = "UI";
+    }
+    
+    public class Colors
+    {
+        public static readonly Color GRAY = new (0.5f, 0.5f, 0.5f);
+    }
     public class Apis
     {
         public static readonly string SERVER_URL = "https://starci-auth-server.cyclic.app/";
