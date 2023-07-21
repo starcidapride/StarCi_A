@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 using static EnumUtils;
 using static AnimatorUtils;
-
+using static GameObjectUtils;
 public enum AlertCaption
 {
     [Description("Success")]
@@ -38,71 +38,30 @@ public class AlertController : SingletonPersistent<AlertController>
     private Transform alertBackdrop;
 
     [SerializeField]
-    private Transform messageBox;
-
-    [SerializeField]
-    private TMP_Text captionText;
-
-    [SerializeField]
-    private TMP_Text messageText;
-
-    [SerializeField]
-    private Button button1;
-
-    [SerializeField]
-    private Button button2;
+    private Transform alertMessageBox;
 
     public void Hide()
     {
+        DestroyAllChildGameObjects(alertBackdrop);
+
         alertBackdrop.gameObject.SetActive(false);
+
+        LoadingSceneManager.isInputBlocked = false;
     }
 
     public void Show(AlertCaption caption, string message, List<AlertButton> buttons = null)
     {
-        if (buttons != null && (buttons.Count < 0 || buttons.Count > 2))
-        {
-            throw new ArgumentException("Invalid number of buttons. The allowed range is from 0 to 2.");
-        }
-        captionText.text = GetDescription(caption);
+        LoadingSceneManager.isInputBlocked = true;
 
-        messageText.text = message;
+        DestroyAllChildGameObjects(alertBackdrop);
 
-        if (buttons != null)
-        {
-            if (buttons.Count == 1)
-            {
-                button2.gameObject.SetActive(true);
+        AlertMessageBoxController.Caption = caption;
 
-                Type script = buttons[0].Script;
+        AlertMessageBoxController.Message = message;
 
-                if (!script.IsSubclassOf(typeof(UnityEngine.Component)))
-                    throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
+        AlertMessageBoxController.Buttons = buttons;
 
-                button2.GetComponentInChildren<TMP_Text>().text = buttons[0].ButtonText;
-                button2.gameObject.AddComponent(script);
-
-            }
-            else
-            {
-                var buttonText1 = buttons[0].ButtonText;
-                var buttonText2 = buttons[1].ButtonText;
-
-                Type script1 = buttons[0].Script;
-                Type script2 = buttons[1].Script;
-
-                if (!script1.IsSubclassOf(typeof(UnityEngine.Component)) || !script2.IsSubclassOf(typeof(UnityEngine.Component)))
-                    throw new ArgumentException("Invalid component type. The Script property must be a subclass of UnityEngine.Component.");
-
-                button1.gameObject.SetActive(true);
-                button2.gameObject.SetActive(true);
-
-                button1.gameObject.AddComponent(script1);
-                button2.gameObject.AddComponent(script2);
-
-                button1.GetComponentInChildren<TMP_Text>().text = buttonText1;
-                button2.GetComponentInChildren<TMP_Text>().text = buttonText2;
-            }
-        }
+        Instantiate(alertMessageBox, alertBackdrop);
 
         alertBackdrop.gameObject.SetActive(true);
     }

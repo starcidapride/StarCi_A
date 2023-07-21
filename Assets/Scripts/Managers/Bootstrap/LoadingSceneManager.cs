@@ -10,7 +10,6 @@ using static EnumUtils;
 using static Constants.LobbyService;
 using static RelayUtils;
 
-using static LobbyUtils;
 using static Constants.ButtonNames;
 
 using System.Collections.Generic;
@@ -35,29 +34,45 @@ public enum SceneName : byte
     [Description("Home")]
     Home
 };
+
+
+
 public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 {
 
     private SceneName sceneActive;
     public SceneName SceneActive => sceneActive;
 
-    private void Update()
+    public static bool isInputBlocked = true;
+    private async void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !isInputBlocked)
         {
-            var currentScene =  GetEnumValueByDescription<SceneName>(SceneManager.GetActiveScene().name);
+
+            var currentScene = GetEnumValueByDescription<SceneName>(SceneManager.GetActiveScene().name);
 
             switch (currentScene)
             {
-                case SceneName.CardWarehouse:
-                    LoadScene(SceneName.Home, false);
+                case SceneName.WaitingRoom:
+
+                    LoadScene(SceneName.LobbyRoom, false);
+
+                    NetworkManager.Singleton.Shutdown();
+
+                    await LobbyUtils.LeaveLobby(NetworkGameManager.Instance.LobbyId.ToString());
                     break;
 
+                case SceneName.Bootstrap:
+                case SceneName.CardWarehouse:
                 case SceneName.LobbyRoom:
+                    
                     LoadScene(SceneName.Home, false);
+
                     break;
 
                 case SceneName.Home:
+                case SceneName.Authentication:
+
                     AlertController.Instance.Show(AlertCaption.Confirm, "Do you want to quit?",
                         new List<AlertButton>()
                         {
@@ -67,17 +82,18 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
                                 Script = typeof(AlertCancelButtonController)
                             },
                             new AlertButton()
-                            {   
+                            {
                                 ButtonText = YES,
                                 Script = typeof(QuitButtonController)
                             }
                         }
                         );
-                    break; 
+                    break;
             }
-
         }
     }
+
+
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneChange;
@@ -85,7 +101,6 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
     private void OnSceneChange(Scene scene, LoadSceneMode mode)
     {
-
     }
 
     public void LoadScene(SceneName sceneToLoad, bool isNetworkSessionAction = true)
@@ -95,7 +110,10 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
 
     private IEnumerator LoadSceneCoroutine(SceneName sceneToLoad, bool isNetworkSessionActive = true)
     {
+        isInputBlocked = true;
+
         LoadingFadeEffectController.Instance.FadeIn();
+
         yield return new WaitUntil(() => LoadingFadeEffectController.beginLoad);
 
         if (isNetworkSessionActive)
@@ -108,17 +126,18 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
             LoadSceneLocal(sceneToLoad);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         LoadingFadeEffectController.Instance.FadeOut();
+
+        yield return new WaitUntil(() => LoadingFadeEffectController.endLoad);
+
+        isInputBlocked = false;
     }
 
     private void LoadSceneLocal(SceneName sceneToLoad)
     {
         SceneManager.LoadScene(GetDescription(sceneToLoad));
-        switch (sceneToLoad)
-        {
-        }
     }
 
     private void LoadSceneNetwork(SceneName sceneToLoad)
@@ -142,14 +161,14 @@ public class LoadingSceneManager : SingletonPersistent<LoadingSceneManager>
         yield return new WaitUntil(() => resultTask.IsCompleted);
 
         if (!resultTask.Result) yield break;
-
+        
         LoadingFadeEffectController.Instance.FadeIn();
 
         yield return new WaitUntil(() => LoadingFadeEffectController.beginLoad);
 
         NetworkManager.Singleton.StartClient();
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
 
         LoadingFadeEffectController.Instance.FadeOut();
     }

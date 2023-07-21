@@ -36,5 +36,11 @@ public class CreateNewDeckModalController : Singleton<CreateNewDeckModalControll
 
         ModalController.Instance.CloseNearestModal();
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnSubmitButtonClick();
+        }
+    }
 }

@@ -10,18 +10,22 @@ using static AuthApiService;
 
 public class BootstrapManager : Singleton<BootstrapManager>
 {
-    public static bool Continue { get; set; }
+    public bool block = false;
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => LoadingSceneManager.Instance != null);
 
-        var authResultTask = AuthenticationUtils.InitiateAnonymousSignIn();
+        var continueAnonymousSignIn = true;
 
-        yield return new WaitUntil(() => authResultTask.IsCompleted);
-
-        if (!authResultTask.Result)
+        while (continueAnonymousSignIn)
         {
-            var buttons = new List<AlertButton>()
+            var authResultTask = AuthenticationUtils.InitiateAnonymousSignIn();
+
+            yield return new WaitUntil(() => authResultTask.IsCompleted);
+
+            if (!authResultTask.Result)
+            {
+                var buttons = new List<AlertButton>()
             {
                 new AlertButton()
                 {
@@ -34,9 +38,15 @@ public class BootstrapManager : Singleton<BootstrapManager>
                     Script = typeof(ReconnectButtonController)
                 },
             };
-            AlertController.Instance.Show(AlertCaption.Error, "Unable to establish an internet connection. Please ensure your network settings are configured correctly and attempt to reconnect.", buttons);
+                AlertController.Instance.Show(AlertCaption.Error, "Unable to establish an internet connection. Please ensure your network settings are configured correctly and attempt to reconnect.", buttons);
 
-            yield return new WaitUntil(() => Continue);
+                block = true;
+                yield return new WaitUntil(() => !block);
+            }
+            else
+            {
+                continueAnonymousSignIn = false;
+            }
         }
 
         var accessToken = GetAuthTokenFromPlayPrefs(AuthTokenType.AccessToken);
@@ -49,21 +59,17 @@ public class BootstrapManager : Singleton<BootstrapManager>
 
             var user = initTask.Result;
 
-            if (user == null)
+            if (user != null)
             {
+                UserManager.Instance.UpdateUser(
+                    user
+                    );
+
+                LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);
                 yield break;
             }
-
-            UserManager.Instance.UpdateUser(
-                user
-                );
-
-            LoadingSceneManager.Instance.LoadScene(SceneName.Home, false);
         }
-        else
-        {
-            LoadingSceneManager.Instance.LoadScene(SceneName.Authentication, false);
-        }
+        LoadingSceneManager.Instance.LoadScene(SceneName.Authentication, false);
     }
 
     private void ClientErrorHandler(HttpRequestException ex)

@@ -8,6 +8,7 @@ using static LobbyUtils;
 using static RelayUtils;
 
 using static Constants.LobbyService;
+using Unity.Services.Lobbies.Models;
 
 public class JoinLobbyButtonController : Singleton<JoinLobbyButtonController>
 {
@@ -37,13 +38,27 @@ public class JoinLobbyButtonController : Singleton<JoinLobbyButtonController>
         }
     }
 
+    private bool isButtonBlocked = true;
     private async void OnButtonClick()
     {
-            var lobby = await JoinLobbyById(LobbyTableController.Instance.SelectedLobbyId, UserManager.Instance.Username);
+        if (isButtonBlocked)
+        {
+            try
+            {
+                isButtonBlocked = false;
 
-            if (lobby == null) return;
+                var lobby = await JoinLobbyById(LobbyTableController.Instance.SelectedLobbyId, UserManager.Instance.Username);
 
-        LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
+                if (lobby == null) return;
+                
+                LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
+            }
+            finally
+            {
+                isButtonBlocked = true;
+            }
+        }
+      
     }
 
 }

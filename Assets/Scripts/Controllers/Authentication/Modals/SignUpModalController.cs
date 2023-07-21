@@ -241,6 +241,14 @@ public class SignUpModalController : Singleton<SignUpModalController>
             }
 
         }
+
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnSubmitButtonClick();
+        }
     }
     private void ClientErrorHandler(HttpRequestException ex)
     {

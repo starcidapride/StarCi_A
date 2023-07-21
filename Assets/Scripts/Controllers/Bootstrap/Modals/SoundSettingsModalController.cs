@@ -59,4 +59,12 @@ public class SoundSettingsModalController : Singleton<SoundSettingsModalControll
 
         ModalController.Instance.CloseNearestModal();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnSubmitButtonClick();
+        }
+    }
 }

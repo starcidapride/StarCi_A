@@ -8,4 +8,6 @@ public class UIController : Singleton<UIController>
     {
         GameObjectUtils.SetInteractability(transform, state);
     }
+
+
 }

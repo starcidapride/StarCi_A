@@ -19,13 +19,15 @@ using UnityEngine.SceneManagement;
 public enum ConnectedUsersValueChangedType
 {
     ConnectOpponent,
-    Update
 
+    UpdateUser,
 }
 
 public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
 {
     public static Lobby Lobby { get; set; }
+
+    public NetworkVariable<FixedString64Bytes> LobbyId = new();
 
     public NetworkVariable<FixedString32Bytes> LobbyCode = new();
 
@@ -47,10 +49,14 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
     public override void OnNetworkSpawn()
     {
 
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
+
         ConnectedUsers.OnValueChanged = OnConnectedUsersValueChanged;
 
         if (IsHost)
         {
+            LobbyId.Value = Lobby.Id;
+
             LobbyCode.Value = Lobby.LobbyCode;
 
             LobbyName.Value = Lobby.Name;
@@ -84,6 +90,20 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
         }
     }
 
+    private void OnClientDisconnectCallback(ulong clientId)
+    {
+        var connectedUsers = ConnectedUsers.Value;
+
+        var disconectedUserIndex = ConnectedUsers.Value.users.FindIndex((user) => user.clientId == clientId);
+        
+        connectedUsers.users.RemoveAt(disconectedUserIndex);
+
+        valueChangedType = ConnectedUsersValueChangedType.ConnectOpponent;
+
+        connectedUsers = ConnectedUsers.Value;
+
+    }
+
     private async void OnConnectedUsersValueChanged(NetworkUsers previous, NetworkUsers current)
     {   
         switch (valueChangedType)
@@ -108,10 +128,9 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
                 }
                 break;
 
-            case ConnectedUsersValueChangedType.Update:
+            case ConnectedUsersValueChangedType.UpdateUser:
                 ExecuteNotify();
                 break;
-
         }
     }
 
@@ -133,14 +152,14 @@ public class NetworkGameManager : SingletonNetworkPersistent<NetworkGameManager>
             users.users[userIndex] = user;
         }
 
-        valueChangedType = ConnectedUsersValueChangedType.Update;
+        valueChangedType = ConnectedUsersValueChangedType.UpdateUser;
 
         UpdateConnectedUsersServerRpc(users);
     }
 
     public void OnStartButtonClick()
     {
-
+        GetComponent<NetworkObject>().Despawn();
     }
 
     [ServerRpc(RequireOwnership = false)]

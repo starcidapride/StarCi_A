@@ -80,44 +80,60 @@ public class LobbyTableController : Singleton<LobbyTableController>
         refreshButton.onClick.AddListener(OnRefreshButtonClick);
     }
 
+    private bool isRenderDisplayBlocked = true;
     private async void RenderDisplay(string searchValue = null)
     {
-        DestroyAllChildGameObjects(tableBody);
-
-        var lobbies = await GetLobbies();
-        
-        if (!string.IsNullOrEmpty(searchValue))
+        if (isRenderDisplayBlocked)
         {
-           
-
-            lobbies = lobbies.Where(lobby =>
+            try
             {
-                var lobbyNameFilter = lobby.Name.ContainsInsensitive(searchValue);
+                isRenderDisplayBlocked = false;
 
-                var hostFilter = lobby.Data[HOST].Value.ContainsInsensitive(searchValue);
+                DestroyAllChildGameObjects(tableBody);
 
-                var descriptionFilter = lobby.Data[DESCRIPTION].Value.ContainsInsensitive(searchValue);
+                var lobbies = await GetLobbies();
 
-                return lobbyNameFilter || hostFilter || descriptionFilter;
-            }).ToList();
+                if (lobbies == null) return;
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+
+
+                    lobbies = lobbies.Where(lobby =>
+                    {
+                        var lobbyNameFilter = lobby.Name.ContainsInsensitive(searchValue);
+
+                        var hostFilter = lobby.Data[HOST].Value.ContainsInsensitive(searchValue);
+
+                        var descriptionFilter = lobby.Data[DESCRIPTION].Value.ContainsInsensitive(searchValue);
+
+                        return lobbyNameFilter || hostFilter || descriptionFilter;
+                    }).ToList();
+                }
+
+                foreach (var lobby in lobbies)
+                {
+                    var tableRowObject = Instantiate(tableRow, tableBody);
+
+                    tableRowObject.GetComponent<TableRowController>().LobbyId = lobby.Id;
+
+                    tableRowObject.Find("Lobby Name").GetComponent<TMP_Text>().text = lobby.Name;
+
+                    tableRowObject.Find("Host").GetComponent<TMP_Text>().text = lobby.Data[HOST].Value;
+
+                    tableRowObject.Find("Players").GetComponent<TMP_Text>().text = $"{lobby.Players.Count} / {lobby.MaxPlayers}";
+
+                    tableRowObject.Find("Description").GetComponent<TMP_Text>().text = lobby.Data[DESCRIPTION].Value;
+
+                    tableRowObject.Find("Status").GetComponent<TMP_Text>().text = lobby.Data[STATUS].Value;
+                }
+            }
+            finally
+            {
+                isRenderDisplayBlocked = true;
+            }
         }
-
-        foreach (var lobby in lobbies)
-        {
-            var tableRowObject = Instantiate(tableRow, tableBody);
-
-            tableRowObject.GetComponent<TableRowController>().LobbyId = lobby.Id;
-
-            tableRowObject.Find("Lobby Name").GetComponent<TMP_Text>().text = lobby.Name;
-
-            tableRowObject.Find("Host").GetComponent<TMP_Text>().text = lobby.Data[HOST].Value;
-
-            tableRowObject.Find("Players").GetComponent<TMP_Text>().text = $"{lobby.Players.Count} / {lobby.MaxPlayers}";
-            
-            tableRowObject.Find("Description").GetComponent<TMP_Text>().text = lobby.Data[DESCRIPTION].Value;
-
-            tableRowObject.Find("Status").GetComponent<TMP_Text>().text = lobby.Data[STATUS].Value;
-        }
+       
     }
 
     private void OnCreateLobbyButtonClick()

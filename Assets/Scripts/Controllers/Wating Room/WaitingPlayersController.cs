@@ -39,7 +39,13 @@ public class WaitingPlayersController : Singleton<WaitingPlayersController>
     private Transform yourReady;
 
     [SerializeField]
+    private Transform yourNotReady;
+
+    [SerializeField]
     private Transform opponentsReady;
+
+    [SerializeField]
+    private Transform opponentsNotReady;
 
     public void Start()
     {
@@ -54,8 +60,16 @@ public class WaitingPlayersController : Singleton<WaitingPlayersController>
         
         yourUserame.text = NetworkGameManager.Instance.You.Username;
 
-        yourReady.gameObject.SetActive(NetworkGameManager.Instance.ConnectedUsers.Value.users.
-            First(user => user.email.ToString() == NetworkGameManager.Instance.You.Email).isReady);
+        if (NetworkGameManager.Instance.ConnectedUsers.Value.users.
+            First(user => user.email.ToString() == NetworkGameManager.Instance.You.Email).isReady)
+        {
+            yourReady.gameObject.SetActive(true);
+            yourNotReady.gameObject.SetActive(false);
+        } else
+        {
+            yourReady.gameObject.SetActive(false);
+            yourNotReady.gameObject.SetActive(true);
+        }
 
         yourHost.gameObject.SetActive(NetworkManager.Singleton.IsHost);
 
@@ -69,8 +83,18 @@ public class WaitingPlayersController : Singleton<WaitingPlayersController>
 
             opponentsPicture.sprite = CreateSpriteFromTexture(NetworkGameManager.Instance.Opponent.Picture);
 
-            opponentsReady.gameObject.SetActive(NetworkGameManager.Instance.ConnectedUsers.Value.users.
-            First(user => user.email.ToString() != NetworkGameManager.Instance.You.Email).isReady);
+
+            if (NetworkGameManager.Instance.ConnectedUsers.Value.users.
+            First(user => user.email.ToString() != NetworkGameManager.Instance.You.Email).isReady)
+            {
+                opponentsReady.gameObject.SetActive(true);
+                opponentsNotReady.gameObject.SetActive(false);
+            }
+            else
+            {
+                opponentsReady.gameObject.SetActive(false);
+                opponentsNotReady.gameObject.SetActive(true);
+            }
 
             oppponentHost.gameObject.SetActive(!NetworkManager.Singleton.IsHost);
         } else

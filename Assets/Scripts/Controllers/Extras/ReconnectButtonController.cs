@@ -11,12 +11,10 @@ public class ReconnectButtonController : MonoBehaviour
         button.onClick.AddListener(OnButtonClick);
     }
 
-    private async void OnButtonClick()
+    private void OnButtonClick()
     {
-        var authResult = await AuthenticationUtils.InitiateAnonymousSignIn();
-        if (authResult)
-        {
-            BootstrapManager.Continue = true;
-        }
+        BootstrapManager.Instance.block = false;
+
+        AlertController.Instance.Hide();
     }
 }

@@ -34,4 +34,11 @@ public class CreateFirstDeckModalController : Singleton<CreateFirstDeckModalCont
         WaitingRoomManager.Instance.DisplayUI();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnSubmitButtonClick();
+        }
+    }
 }

@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using static LobbyUtils;
 using static RelayUtils;
 using static Constants.ButtonNames;
+using Unity.VisualScripting;
 
 public class CreateLobbyModalController : Singleton<CreateLobbyModalController>
 {
@@ -67,56 +68,68 @@ public class CreateLobbyModalController : Singleton<CreateLobbyModalController>
     }
 
 
-
+    private bool isSubmitButtonBlocked = true;
     private async void OnSubmitButtonClick() {
-
-        var hasError = false;
-
-        if (!Regex.IsMatch(lobbyName, @"^.{6,20}$"))
-        {
-            lobbyNameError.GetComponent<TMP_Text>().text = "Lobby name must be between 6 and 20 characters.";
-            lobbyNameError.gameObject.SetActive(true);
-
-            hasError = true;
-        }
-        else
-        {
-            lobbyNameError.gameObject.SetActive(false);
-        }
-
-        if (hasError) return;
-
-        var button = new List<AlertButton>()
-            {
-        new AlertButton()
-        {
-            ButtonText = CANCEL,
-            Script = typeof(AlertCancelButtonController)
-        } };
-
         LoadingController.Instance.Show();
-        var relayResponse = await CreateRelay();
 
-        if (relayResponse == null) return;
+        if (isSubmitButtonBlocked)
+        {
+            try
+            {
+                isSubmitButtonBlocked = false;
 
-        var lobby = await CreateLobby(
-            lobbyName,
-            UserManager.Instance.Username,
-            relayResponse,
-            description,
-            _private
-            );
+                var hasError = false;
 
-        if (lobby == null) return;
+                if (!Regex.IsMatch(lobbyName, @"^.{6,20}$"))
+                {
+                    lobbyNameError.GetComponent<TMP_Text>().text = "Lobby name must be between 6 and 20 characters.";
+                    lobbyNameError.gameObject.SetActive(true);
+
+                    hasError = true;
+                }
+                else
+                {
+                    lobbyNameError.gameObject.SetActive(false);
+                }
+
+                if (hasError) return;
+
+                var relayResponse = await CreateRelay();
+
+                if (relayResponse == null) return;
+
+                var lobby = await CreateLobby(
+                    lobbyName,
+                    UserManager.Instance.Username,
+                    relayResponse,
+                    description,
+                    _private
+                    );
+
+                if (lobby == null) return;
+
+                ModalController.Instance.CloseNearestModal();
+
+                NetworkGameManager.Lobby = lobby;
+
+                NetworkManager.Singleton.StartHost();
+
+                LoadingSceneManager.Instance.LoadScene(SceneName.WaitingRoom);
+            }
+            finally
+            {
+                LoadingController.Instance.Hide();
+
+                isSubmitButtonBlocked = true;
+            }
+        }
         
-        LoadingController.Instance.Hide();
-
-        ModalController.Instance.CloseNearestModal();
-
-        NetworkGameManager.Lobby = lobby;
-
-        NetworkManager.Singleton.StartHost();
-
-        LoadingSceneManager.Instance.LoadScene(SceneName.WaitingRoom);
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnSubmitButtonClick();
+        }
     }
 }

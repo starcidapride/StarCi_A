@@ -128,4 +128,11 @@ public class SetupProfileModalController : Singleton<SetupProfileModalController
     {
         Debug.Log(ex);
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnSubmitButtonClick();
+        }
+    }
 }

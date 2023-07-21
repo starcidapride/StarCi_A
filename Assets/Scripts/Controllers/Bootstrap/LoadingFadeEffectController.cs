@@ -19,6 +19,8 @@ public class LoadingFadeEffectController : SingletonPersistent<LoadingFadeEffect
 
     public static bool beginLoad;
 
+    public static bool endLoad;
+
     IEnumerator FadeAllEffect()
     {
         yield return StartCoroutine(FadeInEffect());
@@ -30,6 +32,7 @@ public class LoadingFadeEffectController : SingletonPersistent<LoadingFadeEffect
 
     private IEnumerator FadeInEffect()
     {
+        endLoad = false;
 
         transitionBackgroundImage.gameObject.SetActive(true);
 
@@ -65,6 +68,7 @@ public class LoadingFadeEffectController : SingletonPersistent<LoadingFadeEffect
 
         transitionBackgroundImage.gameObject.SetActive(false);
 
+        endLoad = true;
     }
 
     public void FadeIn()

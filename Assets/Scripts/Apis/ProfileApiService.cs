@@ -78,10 +78,10 @@ public class ProfileApiService
     public static async Task<PresentableUser> ExecuteGetProfile(string email, ClientErrorHandler clientErrorHandler = null, FailedResponseHandler failedResponseHandler = null, RefreshTokenExpirationHandler refreshTokenExpirationHandler = null)
     {
         using var client = new HttpClient();
-
         try
         {
             var uriBuilder = new UriBuilder(GET_PROFILE_API);
+
             uriBuilder.Path += $"/{email}";
 
             var response = await client.GetAsync(uriBuilder.ToString());
@@ -101,6 +101,6 @@ public class ProfileApiService
         {
             clientErrorHandler?.Invoke(ex);
             return null;
-        } 
+        }
     }
 }

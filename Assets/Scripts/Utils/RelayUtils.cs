@@ -32,21 +32,10 @@ public class RelayUtils
         {
             Debug.Log(ex);
 
-            AlertController.Instance.Show(
-            AlertCaption.Error,
-            "Unable to establish a connection with the relay. Please attempt again.",
-            new List<AlertButton>()
-            {
-                  new AlertButton()
-                  {
-                      ButtonText = CANCEL,
-                      Script = typeof(AlertCancelButtonController)
-                  }
-            });
+            HandleTimedOut(ex);
 
             return null;
         }
-
     }
 
     public static async Task<bool> JoinRelay(string joinCode)
@@ -64,26 +53,34 @@ public class RelayUtils
                 joinAllocation.HostConnectionData
                 );
 
-            return true;      
+            return true;
         }
         catch (RelayServiceException ex)
         {
             Debug.Log(ex);
 
+            HandleTimedOut(ex);
+
+            return true;
+        }
+    }
+
+    private static void HandleTimedOut(RelayServiceException ex)
+    {
+        if (ex.ErrorCode == 15998)
+        {
             AlertController.Instance.Show(
-            AlertCaption.Error,
-            "Unable to establish a connection with the relay. Please attempt again.",
-            new List<AlertButton>()
-            {
+          AlertCaption.Error,
+          "The request to relay service has timed out. Please try again later.",
+          new List<AlertButton>()
+          {
                   new AlertButton()
                   {
                       ButtonText = CANCEL,
                       Script = typeof(AlertCancelButtonController)
                   }
-            });
-
-            return false;
+          });
         }
-    } 
-
+       
+    }
 }

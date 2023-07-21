@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using static LobbyUtils;
 using static RelayUtils;
 using static Constants.LobbyService;
-
+using System.Threading.Tasks;
 
 public class HomeButtonsController : Singleton<HomeButtonsController>
 {
@@ -30,12 +30,24 @@ public class HomeButtonsController : Singleton<HomeButtonsController>
         LoadingSceneManager.Instance.LoadScene(SceneName.LobbyRoom, false);
     }
 
+    private bool isQuickJoinButtonBlocked = true;
     private async void OnQuickJoinButtonClick()
-    {
-        var lobby = await QuickJoin(UserManager.Instance.Username);
-        
-        if (lobby == null) return;
+    {   
+        if (isQuickJoinButtonBlocked)
+        {
+            try
+            {
+                isQuickJoinButtonBlocked = false;
 
-        LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
+                var lobby = await QuickJoin(UserManager.Instance.Username);
+
+                if (lobby == null) return;
+
+                LoadingSceneManager.Instance.JoinRelayAndStartClient(lobby);
+            } finally
+            {
+                isQuickJoinButtonBlocked = true;
+            }
+        }
     }
 }

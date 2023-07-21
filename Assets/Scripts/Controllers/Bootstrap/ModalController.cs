@@ -30,9 +30,13 @@ public class ModalController : SingletonPersistent<ModalController>
         modalActive = false;
 
         modalBackdrop.gameObject.SetActive(false);
+
+        LoadingSceneManager.isInputBlocked = false;
     }
     private void Show()
     {
+        LoadingSceneManager.isInputBlocked = true;
+
         modalBackdrop.gameObject.SetActive(true);
 
         modalActive = true;
@@ -55,6 +59,7 @@ public class ModalController : SingletonPersistent<ModalController>
 
     private IEnumerator InstantiateModalCoroutine(Transform modal)
     {
+
         if (!HasActived())
         {
             Show();
@@ -97,4 +102,5 @@ public class ModalController : SingletonPersistent<ModalController>
 
         Hide();
     }
+
 }

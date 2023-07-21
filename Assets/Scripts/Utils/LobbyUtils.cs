@@ -9,7 +9,6 @@ using UnityEngine;
 using static Constants.LobbyService;
 using static EnumUtils;
 using static Constants.ButtonNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Unity.Services.Authentication;
 
 public enum LobbyStatus
@@ -23,10 +22,10 @@ public enum LobbyStatus
 
 public class LobbyUtils
 {
+  
 
     public static async Task<Lobby> CreateLobby(string lobbyName, string username, string joinCode, string description, bool isPrivate = false)
     {
-
         try
         {
             var player = new Player()
@@ -73,7 +72,6 @@ public class LobbyUtils
                          DataObject.VisibilityOptions.Public,
                          joinCode
                         ) },
-
               }
           }
               );
@@ -82,20 +80,11 @@ public class LobbyUtils
         {
             Debug.Log(ex);
 
-            AlertController.Instance.Show(
-            AlertCaption.Error,
-            "Failed to create a new lobby. Please try again.",
-            new List<AlertButton>()
-            {
-                  new AlertButton()
-                  {
-                      ButtonText = CANCEL,
-                      Script = typeof(AlertCancelButtonController)
-                  }
-            });
-    
+            HandleTimedOut(ex);
+
             return null;
         }
+
     }
 
     public static async void MaintainLobbyHeartbeat(string lobbyId)
@@ -104,9 +93,16 @@ public class LobbyUtils
         {
             while (true)
             {
-                await LobbyService.Instance.SendHeartbeatPingAsync(lobbyId); ;
+                try
+                {
+                    await LobbyService.Instance.SendHeartbeatPingAsync(lobbyId); ;
 
-                await Task.Delay(TimeSpan.FromSeconds(25));
+                    await Task.Delay(TimeSpan.FromSeconds(25));
+                }
+                catch (LobbyServiceException ex)
+                {
+                    HandleTimedOut(ex);
+                }
             }
         });
     }
@@ -138,22 +134,12 @@ public class LobbyUtils
 
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
 
-            if (ex.ErrorCode == 16006)
-            {
-                AlertController.Instance.Show(
-                AlertCaption.Error,
-                "There are no available lobbies at the moment. Please try again.",
-                new List<AlertButton>()
-            {
-                  new AlertButton()
-                  {
-                      ButtonText = CANCEL,
-                      Script = typeof(AlertCancelButtonController)
-                  }
-            });
-            }
+            HandleExceedRateLimit(ex);
+
+            HandleNoAvailableLobbies(ex);
+            
+            HandleTimedOut(ex);
 
             return null;
         }
@@ -189,20 +175,9 @@ public class LobbyUtils
         {
             Debug.Log(ex);
 
-            if (ex.ErrorCode == 16010)
-            {
-                AlertController.Instance.Show(
-                AlertCaption.Error,
-                "The entered lobby code is incorrect. Please attempt again.",
-                new List<AlertButton>()
-            {
-                  new AlertButton()
-                  {
-                      ButtonText = CANCEL,
-                      Script = typeof(AlertCancelButtonController)
-                  }
-            });
-            }
+            HandleLobbyCodeIncorrect(ex);
+
+            HandleTimedOut(ex);
 
             return null;
         }
@@ -238,20 +213,7 @@ public class LobbyUtils
         {
             Debug.Log(ex);
 
-            if (ex.ErrorCode == 16010)
-            {
-                AlertController.Instance.Show(
-                AlertCaption.Error,
-                "The lobby ID is incorrect. Please attempt again.",
-                new List<AlertButton>()
-            {
-                  new AlertButton()
-                  {
-                      ButtonText = CANCEL,
-                      Script = typeof(AlertCancelButtonController)
-                  }
-            });
-            }
+            HandleTimedOut(ex);
 
             return null;
         }
@@ -261,11 +223,17 @@ public class LobbyUtils
     {
         try
         {
+            Debug.Log(lobbyId);
+
             await LobbyService.Instance.RemovePlayerAsync(lobbyId, AuthenticationService.Instance.PlayerId);
             return true;
-        } catch (LobbyServiceException ex)
+        }
+        catch (LobbyServiceException ex)
         {
             Debug.Log(ex);
+
+            HandleTimedOut(ex);
+
             return false;
         }
     }
@@ -283,19 +251,81 @@ public class LobbyUtils
         {
             Debug.Log(ex);
 
+            HandleTimedOut(ex);
+
+            return null;
+        }
+    }
+
+    private static void HandleTimedOut(LobbyServiceException ex)
+    {
+        if (ex.ErrorCode == 16998)
+        {
             AlertController.Instance.Show(
             AlertCaption.Error,
-            "Failed to retrieve lobbies. Please attempt again.",
+            "The request to lobby service has timed out. Please try again later.",
             new List<AlertButton>()
-            {
+        {
                   new AlertButton()
                   {
                       ButtonText = CANCEL,
                       Script = typeof(AlertCancelButtonController)
                   }
-            });
+        });
+        }
+    }
 
-            return null;
+    private static void HandleExceedRateLimit(LobbyServiceException ex)
+    {
+        if (ex.ErrorCode == 16429)
+        {
+            AlertController.Instance.Show(
+            AlertCaption.Error,
+          "The request to lobby service cannot be processed at the moment due to exceeding the rate limit. Please wait a while and try again later.",
+          new List<AlertButton>()
+      {
+                  new AlertButton()
+    {
+        ButtonText = CANCEL,
+                      Script = typeof(AlertCancelButtonController)
+                  }
+});
+        }
+    }
+
+    private static void HandleLobbyCodeIncorrect(LobbyServiceException ex)
+    {
+        if (ex.ErrorCode == 16010)
+        {
+            AlertController.Instance.Show(
+            AlertCaption.Error,
+            "The entered lobby code is incorrect. Please attempt again.",
+            new List<AlertButton>()
+        {
+                  new AlertButton()
+                  {
+                      ButtonText = CANCEL,
+                      Script = typeof(AlertCancelButtonController)
+                  }
+        });
+        }
+    }
+
+    private static void HandleNoAvailableLobbies(LobbyServiceException ex)
+    {
+        if (ex.ErrorCode == 16006)
+        {
+            AlertController.Instance.Show(
+            AlertCaption.Error,
+            "There are no available lobbies at the moment. Please try again.",
+            new List<AlertButton>()
+        {
+                  new AlertButton()
+                  {
+                      ButtonText = CANCEL,
+                      Script = typeof(AlertCancelButtonController)
+                  }
+        });
         }
     }
 
